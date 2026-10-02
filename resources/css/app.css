@@ -1,1 +1,21 @@
 @import "tailwindcss";
+
+@theme {
+    --color-primary: #30AFFF;
+    --color-btnblue: #6B8CFF;
+}
+
+@layer utilities {
+    .bg-diagonal {
+        background-color: #30AFFF;
+        background-image: repeating-linear-gradient(-45deg,
+                transparent,
+                transparent 40px,
+                rgba(255, 255, 255, 0.15) 40px,
+                rgba(255, 255, 255, 0.15) 42px,
+                transparent 42px,
+                transparent 80px,
+                rgba(255, 255, 255, 0.3) 80px,
+                rgba(255, 255, 255, 0.3) 84px);
+    }
+}
