@@ -1180,7 +1180,7 @@
                                     <!-- Tombol Edit -->
                                     <button type="button" 
                                         class="btn-action btn-edit"
-                                        data-id="{{ $user->id }}"
+                                        data-id="{{ $user->username }}"
                                         data-nama="{{ $user->nama_lengkap }}"
                                         data-nis="{{ $user->nis_nip }}"
                                         data-email="{{ $user->email }}"
@@ -1194,7 +1194,7 @@
                                     <!-- Tombol Hapus (Pop Up Custom) -->
                                     <button type="button" 
                                         class="btn-action btn-delete"
-                                        onclick="openDeleteModal('{{ route('system-admin.delete-user', $user->id) }}', '{{ addslashes($user->nama_lengkap) }}')">
+                                        onclick="openDeleteModal('{{ route('system-admin.delete-user', $user->username) }}', '{{ addslashes($user->nama_lengkap) }}')">
                                         <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
                                         Hapus
                                     </button>
@@ -1243,7 +1243,7 @@
                     <div class="user-card-actions">
                         <button type="button" 
                             class="btn-action btn-edit"
-                            data-id="{{ $user->id }}"
+                            data-id="{{ $user->username }}"
                             data-nama="{{ $user->nama_lengkap }}"
                             data-nis="{{ $user->nis_nip }}"
                             data-email="{{ $user->email }}"
@@ -1256,7 +1256,7 @@
 
                         <button type="button" 
                             class="btn-action btn-delete"
-                            onclick="openDeleteModal('{{ route('system-admin.delete-user', $user->id) }}', '{{ addslashes($user->nama_lengkap) }}')">
+                            onclick="openDeleteModal('{{ route('system-admin.delete-user', $user->username) }}', '{{ addslashes($user->nama_lengkap) }}')">
                             <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
                             Hapus
                         </button>
@@ -1295,12 +1295,17 @@
             
             <div class="form-group">
                 <label>Nama Lengkap</label>
-                <input type="text" name="nama_lengkap" placeholder="Masukkan nama lengkap" required>
+                <input type="text" name="nama" placeholder="Masukkan nama lengkap" required>
             </div>
             
             <div class="form-group">
                 <label>NIS / NIP</label>
-                <input type="text" name="nis_nip" placeholder="Contoh: 12345678" required>
+                <input type="text" name="nis_nip" placeholder="NIS (siswa) / NIP (pegawai)" required>
+            </div>
+
+            <div class="form-group">
+                <label>Username <small style="color:#64748b">(digunakan untuk login)</small></label>
+                <input type="text" name="username" placeholder="contoh: budi.santoso" required>
             </div>
             
             <div class="form-group">
@@ -1323,7 +1328,7 @@
                 <select name="role" required>
                     <option value="">-- Pilih Role Pengguna --</option>
                     <option value="siswa">Siswa</option>
-                    <option value="guru">Guru</option>
+                    <option value="pegawai">Guru / Pegawai</option>
                     <option value="admin_sarana">Admin Sarana</option>
                     <option value="admin_sistem">Admin Sistem</option>
                 </select>
@@ -1350,12 +1355,7 @@
             
             <div class="form-group">
                 <label>Nama Lengkap</label>
-                <input type="text" name="nama_lengkap" id="edit_nama" placeholder="Nama Lengkap" required>
-            </div>
-            
-            <div class="form-group">
-                <label>NIS / NIP</label>
-                <input type="text" name="nis_nip" id="edit_nis" placeholder="NIS / NIP" required>
+                <input type="text" name="nama" id="edit_nama" placeholder="Nama Lengkap" required>
             </div>
             
             <div class="form-group">
@@ -1372,7 +1372,7 @@
                 <label>Role / Peran Pengguna</label>
                 <select name="role" id="edit_role" required>
                     <option value="siswa">Siswa</option>
-                    <option value="guru">Guru</option>
+                    <option value="pegawai">Guru / Pegawai</option>
                     <option value="admin_sarana">Admin Sarana</option>
                     <option value="admin_sistem">Admin Sistem</option>
                 </select>
@@ -1435,16 +1435,14 @@
 
     // ===== MODAL EDIT =====
     function openEditModal(button) {
-        const id = button.getAttribute('data-id');
+        const username = button.getAttribute('data-id'); // data-id sekarang berisi username
         const nama = button.getAttribute('data-nama');
-        const nis = button.getAttribute('data-nis');
         const email = button.getAttribute('data-email');
         const hp = button.getAttribute('data-hp');
         const role = button.getAttribute('data-role');
 
-        document.getElementById('editForm').action = '/super-admin/users/' + id;
+        document.getElementById('editForm').action = '/super-admin/users/' + username;
         document.getElementById('edit_nama').value = nama || '';
-        document.getElementById('edit_nis').value = nis || '';
         document.getElementById('edit_email').value = email || '';
         document.getElementById('edit_hp').value = hp || '';
         document.getElementById('edit_role').value = role || 'siswa';

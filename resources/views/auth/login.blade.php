@@ -37,8 +37,9 @@
         @csrf
 
         <div>
-            <label style="display: block; color: #374151; font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem;">Nama / NIS / NIP</label>
-            <input type="text" name="nis_nip" value="{{ old('nis_nip') }}" required
+            <label style="display: block; color: #374151; font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem;">Username / Email</label>
+            <input type="text" name="username" value="{{ old('username') }}" required
+                placeholder="Masukkan username atau email"
                 style="width: 100%; padding: 0.75rem 0.5rem; border: none; border-bottom: 2px solid #cbd5e1; font-size: 0.9rem; background: transparent; outline: none; transition: border-color 0.2s;">
         </div>
 

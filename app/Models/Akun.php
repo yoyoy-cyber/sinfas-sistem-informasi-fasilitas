@@ -7,17 +7,14 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 /**
- * Model User — alias/wrapper untuk tabel 'akun' sesuai ERD SINFAS
+ * Model Akun — tabel utama autentikasi sesuai ERD SINFAS
  * PK: username (string)
- *
- * Digunakan oleh sistem Auth Laravel (config/auth.php).
- * Kolom 'username' digunakan sebagai primary key dan credential login.
+ * Relasi: 1-to-1 dengan Siswa atau Pegawai
  */
-class User extends Authenticatable
+class Akun extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    // Arahkan ke tabel 'akun' sesuai ERD
     protected $table      = 'akun';
     protected $primaryKey = 'username';
     public    $incrementing = false;
@@ -67,31 +64,21 @@ class User extends Authenticatable
     }
 
     /* ----------------------------------------------------------------
-     * Relasi ke PeminjamanRequest (1-to-many) via username
+     * Helper: ambil nama lengkap (dari siswa atau pegawai)
      * ---------------------------------------------------------------- */
-    public function peminjamanRequests()
+    public function getNamaAttribute(): string
     {
-        return $this->hasMany(PeminjamanRequest::class, 'username', 'username');
+        if ($this->siswa) {
+            return $this->siswa->nama;
+        }
+        if ($this->pegawai) {
+            return $this->pegawai->nama;
+        }
+        return $this->username;
     }
 
     /* ----------------------------------------------------------------
-     * Accessor: nama_lengkap — ambil dari siswa atau pegawai
-     * ---------------------------------------------------------------- */
-    public function getNamaLengkapAttribute(): string
-    {
-        return $this->siswa?->nama ?? $this->pegawai?->nama ?? $this->username;
-    }
-
-    /* ----------------------------------------------------------------
-     * Accessor: nis_nip — ambil NIS (siswa) atau NIP (pegawai)
-     * ---------------------------------------------------------------- */
-    public function getNisNipAttribute(): ?string
-    {
-        return $this->siswa?->nis ?? $this->pegawai?->nip;
-    }
-
-    /* ----------------------------------------------------------------
-     * Accessor: no_hp
+     * Helper: ambil no_hp
      * ---------------------------------------------------------------- */
     public function getNoHpAttribute(): ?string
     {
@@ -99,7 +86,7 @@ class User extends Authenticatable
     }
 
     /* ----------------------------------------------------------------
-     * Helper: cek apakah admin sarana
+     * Helper: apakah admin sarana
      * ---------------------------------------------------------------- */
     public function isAdminSarana(): bool
     {
@@ -107,7 +94,7 @@ class User extends Authenticatable
     }
 
     /* ----------------------------------------------------------------
-     * Helper: cek apakah admin sistem
+     * Helper: apakah admin sistem
      * ---------------------------------------------------------------- */
     public function isAdminSistem(): bool
     {
@@ -115,7 +102,7 @@ class User extends Authenticatable
     }
 
     /* ----------------------------------------------------------------
-     * Helper: cek apakah siswa
+     * Helper: apakah siswa
      * ---------------------------------------------------------------- */
     public function isSiswa(): bool
     {
@@ -123,7 +110,7 @@ class User extends Authenticatable
     }
 
     /* ----------------------------------------------------------------
-     * Helper: cek apakah pegawai/guru
+     * Helper: apakah pegawai/guru
      * ---------------------------------------------------------------- */
     public function isPegawai(): bool
     {

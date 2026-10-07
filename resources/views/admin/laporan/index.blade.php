@@ -544,6 +544,126 @@
             display: block;
         }
     }
+
+    /* ===== ANALYTICS & CHART STYLING ===== */
+    .analytics-section {
+        margin-bottom: 2rem;
+    }
+
+    .analytics-card {
+        background: white;
+        border-radius: 20px;
+        padding: 1.75rem 2rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    .analytics-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #f1f5f9;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .analytics-title {
+        font-size: 1.15rem;
+        font-weight: 800;
+        color: #1e293b;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+
+    .analytics-subtitle {
+        font-size: 0.85rem;
+        color: #64748b;
+        margin-top: 0.35rem;
+    }
+
+    .analytics-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: #eff6ff;
+        color: #1d4ed8;
+        padding: 0.35rem 0.85rem;
+        border-radius: 9999px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        border: 1px solid #bfdbfe;
+    }
+
+    .badge-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #2563eb;
+        display: inline-block;
+        box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+    }
+
+    .analytics-grid {
+        display: grid;
+        grid-template-columns: 2fr 1.1fr;
+        gap: 1.5rem;
+    }
+
+    .chart-box {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 1.25rem 1.5rem;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chart-box-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .chart-box-header h4 {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0;
+    }
+
+    .chart-subtext {
+        font-size: 0.75rem;
+        color: #475569;
+        background: #e2e8f0;
+        padding: 0.2rem 0.55rem;
+        border-radius: 6px;
+        font-weight: 600;
+    }
+
+    .chart-canvas-wrapper {
+        position: relative;
+        flex: 1;
+        min-height: 280px;
+        max-height: 320px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    @media (max-width: 992px) {
+        .analytics-grid {
+            grid-template-columns: 1fr;
+        }
+        .analytics-card {
+            padding: 1.25rem;
+        }
+    }
 </style>
 @endsection
 
@@ -752,6 +872,80 @@
             <div class="summary-lbl">Rusak Berat</div>
         </div>
     @endif
+</div>
+
+<!-- 3.5. GRAFIK & VISUALISASI DATA (PER BULAN / FILTER AKTIF) -->
+<div class="analytics-section">
+    <div class="analytics-card">
+        <div class="analytics-header">
+            <div>
+                <div class="analytics-title">
+                    <span>📊</span>
+                    <span>
+                        @if($jenisLaporan === 'frekuensi')
+                            Grafik Tren Peminjaman {{ ($chartData['timeType'] ?? '') === 'daily' ? 'Harian' : 'Per Bulan' }}
+                        @elseif($jenisLaporan === 'kerusakan')
+                            Grafik Riwayat Kasus Kerusakan {{ ($chartData['timeType'] ?? '') === 'daily' ? 'Harian' : 'Per Bulan' }}
+                        @elseif($jenisLaporan === 'keterlambatan')
+                            Grafik Tren Keterlambatan {{ ($chartData['timeType'] ?? '') === 'daily' ? 'Harian' : 'Per Bulan' }}
+                        @else
+                            Grafik Distribusi Stok per Kategori
+                        @endif
+                    </span>
+                </div>
+                <div class="analytics-subtitle">
+                    Visualisasi data terhitung otomatis sesuai filter &bull; Periode: <strong style="color: #2563eb;">{{ $chartData['periodLabel'] ?? 'Tahun Berjalan' }}</strong>
+                </div>
+            </div>
+            <div class="analytics-badge">
+                <span class="badge-dot"></span> Grafik Interaktif
+            </div>
+        </div>
+
+        <div class="analytics-grid">
+            <!-- Main Chart (Line / Bar) -->
+            <div class="chart-box main-chart-box">
+                <div class="chart-box-header">
+                    <h4>
+                        @if($jenisLaporan === 'frekuensi')
+                            📈 Tren Peminjaman Barang
+                        @elseif($jenisLaporan === 'kerusakan')
+                            📊 Tren Kasus Kerusakan Barang
+                        @elseif($jenisLaporan === 'keterlambatan')
+                            ⏱️ Tren Keterlambatan Pengembalian
+                        @else
+                            📦 Kapasitas Stok per Kategori
+                        @endif
+                    </h4>
+                    <span class="chart-subtext">Sesuai Filter Admin</span>
+                </div>
+                <div class="chart-canvas-wrapper">
+                    <canvas id="mainReportChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Secondary Chart (Doughnut / Top 5 / Pie) -->
+            <div class="chart-box side-chart-box">
+                <div class="chart-box-header">
+                    <h4>
+                        @if($jenisLaporan === 'frekuensi')
+                            🏆 Top 5 Barang Sering Dipinjam
+                        @elseif($jenisLaporan === 'kerusakan')
+                            ⚠️ Proporsi Kondisi Kerusakan
+                        @elseif($jenisLaporan === 'keterlambatan')
+                            📋 Status Keterlambatan
+                        @else
+                            🥧 Proporsi Kondisi Keseluruhan
+                        @endif
+                    </h4>
+                    <span class="chart-subtext">Distribusi Persentase</span>
+                </div>
+                <div class="chart-canvas-wrapper">
+                    <canvas id="secondaryReportChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- 4. HASIL LAPORAN (DESKTOP TABLE & MOBILE CARDS) -->
@@ -1097,6 +1291,7 @@
 @endsection
 
 @section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     function setDateRange(type) {
         const startInput = document.getElementById('start_date');
@@ -1129,5 +1324,136 @@
             endInput.value = formatDate(nextMonthLast);
         }
     }
+
+    // Inisialisasi Grafik Chart.js
+    document.addEventListener('DOMContentLoaded', function() {
+        const chartData = @json($chartData ?? []);
+        if (!chartData || !chartData.labels) return;
+
+        const mainCtx = document.getElementById('mainReportChart');
+        const secondaryCtx = document.getElementById('secondaryReportChart');
+
+        // Common Plugins Configuration
+        const commonPlugins = {
+            legend: {
+                position: 'bottom',
+                labels: {
+                    boxWidth: 12,
+                    boxHeight: 12,
+                    usePointStyle: true,
+                    pointStyle: 'circle',
+                    font: { family: "'Segoe UI', Tahoma, sans-serif", size: 12, weight: '600' },
+                    padding: 14
+                }
+            },
+            tooltip: {
+                backgroundColor: 'rgba(15, 23, 42, 0.92)',
+                titleFont: { size: 13, weight: '700' },
+                bodyFont: { size: 12 },
+                padding: 10,
+                cornerRadius: 8,
+                boxPadding: 4
+            }
+        };
+
+        // 1. Render Grafik Utama (Tren Per Bulan / Periode)
+        if (mainCtx) {
+            let mainChartType = 'bar';
+            if (chartData.type === 'frekuensi') {
+                mainChartType = 'line';
+            }
+
+            new Chart(mainCtx, {
+                type: mainChartType,
+                data: {
+                    labels: chartData.labels,
+                    datasets: chartData.datasets || []
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    plugins: commonPlugins,
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: { font: { size: 11, weight: '600' }, color: '#64748b' }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(226, 232, 240, 0.8)' },
+                            ticks: {
+                                precision: 0,
+                                font: { size: 11 },
+                                color: '#64748b',
+                                callback: function(val) {
+                                    return val + (chartData.type === 'frekuensi' ? 'x' : ' unit');
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 2. Render Grafik Sekunder (Doughnut Proporsi / Top 5)
+        if (secondaryCtx) {
+            if (chartData.type === 'frekuensi') {
+                const topLabels = (chartData.topBarangLabels && chartData.topBarangLabels.length) 
+                    ? chartData.topBarangLabels 
+                    : ['Belum Ada Data'];
+                const topData = (chartData.topBarangData && chartData.topBarangData.length) 
+                    ? chartData.topBarangData 
+                    : [0];
+                const topColors = ['#2563eb', '#3b82f6', '#60a5fa', '#93c5fd', '#a5b4fc'];
+
+                new Chart(secondaryCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: topLabels,
+                        datasets: [{
+                            data: topData,
+                            backgroundColor: topColors.slice(0, topLabels.length),
+                            borderWidth: 2,
+                            borderColor: '#ffffff',
+                            hoverOffset: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '62%',
+                        plugins: commonPlugins
+                    }
+                });
+            } else if (chartData.pieLabels && chartData.pieData) {
+                const pieColors = chartData.pieColors || ['#10b981', '#f59e0b', '#ef4444'];
+                const totalPie = chartData.pieData.reduce((a, b) => a + b, 0);
+
+                new Chart(secondaryCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: totalPie > 0 ? chartData.pieLabels : ['Belum Ada Data'],
+                        datasets: [{
+                            data: totalPie > 0 ? chartData.pieData : [1],
+                            backgroundColor: totalPie > 0 ? pieColors : ['#cbd5e1'],
+                            borderWidth: 2,
+                            borderColor: '#ffffff',
+                            hoverOffset: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '62%',
+                        plugins: commonPlugins
+                    }
+                });
+            }
+        }
+    });
 </script>
 @endsection

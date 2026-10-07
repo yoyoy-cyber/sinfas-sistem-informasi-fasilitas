@@ -57,4 +57,24 @@ class DashboardController extends Controller
 
         return view('user.dashboard', compact('stats', 'kategoris', 'barangs', 'query'));
     }
+
+    public function kategori($id_kategori)
+    {
+        $kategoris = Kategori::orderBy('nama_kategori', 'asc')->get();
+
+        $barangs = Barang::with('kategori')
+            ->withCount('peminjamanRequests')
+            ->where('id_kategori', $id_kategori)
+            ->where('jumlah_baik', '>', 0)
+            ->orderBy('updated_at', 'desc')
+            ->get();
+
+        $stats = [
+            'tersedia' => Barang::where('jumlah_baik', '>', 0)->count(),
+            'dipinjam' => Barang::where('jumlah_baik', 0)->where('jumlah_kurang_baik', '>', 0)->count(),
+            'rusak' => Barang::where('jumlah_rusak_berat', '>', 0)->where('jumlah_baik', 0)->count(),
+        ];
+
+        return view('user.dashboard', compact('stats', 'kategoris', 'barangs', 'id_kategori'));
+    }
 }

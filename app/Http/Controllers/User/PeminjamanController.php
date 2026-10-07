@@ -30,17 +30,21 @@ class PeminjamanController extends Controller
             'alasan_keperluan' => 'required|string|min:10|max:500',
         ]);
 
+        // Ambil NIS jika user adalah siswa
+        $nis = $user->siswa?->nis ?? null;
+
         PeminjamanRequest::create([
-            'user_id' => $user->id,
-            'kode_barang' => $barang->kode_barang,
-            'nama_barang' => $barang->nama_barang,
-            'nama_peminjam' => $user->nama_lengkap,
-            'role_peminjam' => $user->role,
-            'tanggal_pinjam' => $validated['tanggal_pinjam'],
-            'tanggal_kembali' => $validated['tanggal_kembali'],
-            'no_telepon' => $validated['no_telepon'],
+            'username'         => $user->username,    // FK → akun.username (ERD)
+            'nis'              => $nis,               // FK → siswa.nis (ERD)
+            'kode_barang'      => $barang->kode_barang,
+            'nama_barang'      => $barang->nama_barang,
+            'nama_peminjam'    => $user->nama_lengkap,
+            'role_peminjam'    => $user->role,
+            'tanggal_pinjam'   => $validated['tanggal_pinjam'],
+            'tanggal_kembali'  => $validated['tanggal_kembali'],
+            'no_telepon'       => $validated['no_telepon'],
             'alasan_keperluan' => $validated['alasan_keperluan'],
-            'status' => 'pending',
+            'status'           => 'pending',
         ]);
 
         return redirect()->route('user.status')
@@ -52,7 +56,7 @@ class PeminjamanController extends Controller
     public function status()
     {
         $pengajuan = PeminjamanRequest::with(['barang.kategori'])
-            ->where('user_id', Auth::id())
+            ->where('username', Auth::user()->username)
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -63,7 +67,7 @@ class PeminjamanController extends Controller
     public function statusDetail($id)
     {
         $pengajuan = PeminjamanRequest::with(['barang.kategori'])
-            ->where('user_id', Auth::id())
+            ->where('username', Auth::user()->username)
             ->findOrFail($id);
 
         return view('user.status-detail', compact('pengajuan'));

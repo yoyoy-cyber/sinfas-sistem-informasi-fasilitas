@@ -14,11 +14,11 @@ class PengembalianController extends Controller
     // Tampilkan daftar pengembalian & barang yang sedang dipinjam
     public function index()
     {
-        $userId = Auth::id();
+        $username = Auth::user()->username;
 
         // Barang yang sedang dipinjam (status 'disetujui' dan belum diajukan pengembalian / atau pengembalian ditolak)
         $sedangDipinjam = PeminjamanRequest::with(['barang.kategori', 'pengembalian'])
-            ->where('user_id', $userId)
+            ->where('username', $username)
             ->where('status', 'disetujui')
             ->where(function ($query) {
                 $query->whereDoesntHave('pengembalian')
@@ -31,7 +31,7 @@ class PengembalianController extends Controller
 
         // Riwayat pengajuan pengembalian
         $riwayatPengembalian = Pengembalian::with(['barang.kategori', 'peminjaman'])
-            ->where('user_id', $userId)
+            ->where('username', $username)
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -42,7 +42,7 @@ class PengembalianController extends Controller
     public function create($peminjaman_id)
     {
         $peminjaman = PeminjamanRequest::with(['barang.kategori', 'pengembalian'])
-            ->where('user_id', Auth::id())
+            ->where('username', Auth::user()->username)
             ->findOrFail($peminjaman_id);
 
         // Jika status peminjaman bukan disetujui
@@ -64,7 +64,7 @@ class PengembalianController extends Controller
     public function store(Request $request, $peminjaman_id)
     {
         $peminjaman = PeminjamanRequest::with('pengembalian')
-            ->where('user_id', Auth::id())
+            ->where('username', Auth::user()->username)
             ->findOrFail($peminjaman_id);
 
         if ($peminjaman->status !== 'disetujui') {
@@ -96,21 +96,26 @@ class PengembalianController extends Controller
             $fotoPath = 'pengembalian/' . $fileName;
         }
 
+        // Generate kode_kembali
+        $lastId = \App\Models\Pengembalian::max('id') ?? 0;
+        $kodeKembali = 'KB-' . str_pad($lastId + 1, 6, '0', STR_PAD_LEFT);
+
         // Simpan atau update data pengembalian
         $pengembalian = Pengembalian::updateOrCreate(
             ['peminjaman_id' => $peminjaman->id],
             [
-                'user_id' => Auth::id(),
-                'kode_barang' => $peminjaman->kode_barang,
-                'nama_barang' => $peminjaman->nama_barang,
+                'username'             => Auth::user()->username, // FK → akun sesuai ERD
+                'kode_kembali'         => $kodeKembali,
+                'kode_barang'          => $peminjaman->kode_barang,
+                'nama_barang'          => $peminjaman->nama_barang,
                 'tanggal_pengembalian' => $validated['tanggal_pengembalian'],
                 'kondisi_pengembalian' => $validated['kondisi_pengembalian'],
-                'catatan_kondisi' => $validated['catatan_kondisi'],
-                'bukti_foto' => $fotoPath,
-                'status' => 'pending',
-                'alasan_penolakan' => null,
-                'verifikasi_oleh' => null,
-                'tanggal_verifikasi' => null,
+                'catatan_kondisi'      => $validated['catatan_kondisi'],
+                'bukti_foto'           => $fotoPath,
+                'status'               => 'pending',
+                'alasan_penolakan'     => null,
+                'verifikasi_oleh'      => null,
+                'tanggal_verifikasi'   => null,
             ]
         );
 
@@ -122,7 +127,7 @@ class PengembalianController extends Controller
     public function show($id)
     {
         $pengembalian = Pengembalian::with(['barang.kategori', 'peminjaman', 'user'])
-            ->where('user_id', Auth::id())
+            ->where('username', Auth::user()->username)
             ->findOrFail($id);
 
         return view('user.pengembalian.show', compact('pengembalian'));

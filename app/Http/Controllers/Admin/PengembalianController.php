@@ -47,8 +47,8 @@ class PengembalianController extends Controller
         $pengembalian = Pengembalian::with(['barang', 'peminjaman'])->findOrFail($id);
 
         $pengembalian->update([
-            'status' => 'disetujui',
-            'verifikasi_oleh' => Auth::user()->nama_lengkap,
+            'status'           => 'disetujui',
+            'verifikasi_oleh'  => Auth::user()->nama_lengkap,
             'tanggal_verifikasi' => now(),
             'alasan_penolakan' => null,
         ]);
@@ -92,9 +92,9 @@ class PengembalianController extends Controller
         ]);
 
         $pengembalian->update([
-            'status' => 'ditolak',
-            'alasan_penolakan' => $request->alasan,
-            'verifikasi_oleh' => Auth::user()->nama_lengkap,
+            'status'             => 'ditolak',
+            'alasan_penolakan'   => $request->alasan,
+            'verifikasi_oleh'    => Auth::user()->nama_lengkap,
             'tanggal_verifikasi' => now(),
         ]);
 

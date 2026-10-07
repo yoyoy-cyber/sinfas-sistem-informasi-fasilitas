@@ -27,13 +27,14 @@ Route::post('/login', function () {
     $request = request();
     
     $credentials = $request->validate([
-        'nis_nip' => 'required|string',
+        'username' => 'required|string',
         'password' => 'required|string',
     ]);
 
-    $loginField = filter_var($credentials['nis_nip'], FILTER_VALIDATE_EMAIL) ? 'email' : 'nis_nip';
+    // Coba login dengan username atau email (sesuai tabel akun)
+    $loginField = filter_var($credentials['username'], FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
-    if (Auth::attempt([$loginField => $credentials['nis_nip'], 'password' => $credentials['password']])) {
+    if (Auth::attempt([$loginField => $credentials['username'], 'password' => $credentials['password']])) {
         $request->session()->regenerate();
         $user = Auth::user();
 
@@ -48,32 +49,51 @@ Route::post('/login', function () {
     }
 
     return back()->withErrors([
-        'nis_nip' => 'NIS/NIP, Email, atau Password salah!',
-    ])->onlyInput('nis_nip');
+        'username' => 'Username, Email, atau Password salah!',
+    ])->onlyInput('username');
 })->name('login.post');
 
 Route::post('/register', function () {
     $request = request();
     
     $validated = $request->validate([
-        'nama_lengkap' => 'required|string|max:255',
-        'nis_nip' => 'required|string|unique:users,nis_nip',
-        'email' => 'required|email|unique:users,email',
+        'nama'     => 'required|string|max:255',
+        'nis_nip'  => 'required|string|max:20',
+        'username' => 'required|string|max:50|unique:akun,username',
+        'email'    => 'required|email|unique:akun,email',
         'password' => 'required|string|min:6|confirmed',
-        'no_hp' => 'required|string',
-        'role' => 'required|in:siswa,guru',
+        'no_hp'    => 'required|string|max:20',
+        'kelas'    => 'nullable|string|max:20',
+        'role'     => 'required|in:siswa,pegawai',
     ]);
 
-    $user = User::create([
-        'nama_lengkap' => $validated['nama_lengkap'],
-        'nis_nip' => $validated['nis_nip'],
-        'email' => $validated['email'],
+    // Buat akun di tabel akun (sesuai ERD)
+    $akun = User::create([
+        'username' => $validated['username'],
+        'email'    => $validated['email'],
+        'role'     => $validated['role'],
         'password' => Hash::make($validated['password']),
-        'no_hp' => $validated['no_hp'],
-        'role' => $validated['role'],
     ]);
 
-    Auth::login($user);
+    // Buat data siswa atau pegawai sesuai role
+    if ($validated['role'] === 'siswa') {
+        \App\Models\Siswa::create([
+            'nis'      => $validated['nis_nip'],
+            'username' => $validated['username'],
+            'nama'     => $validated['nama'],
+            'kelas'    => $validated['kelas'] ?? null,
+            'no_hp'    => $validated['no_hp'],
+        ]);
+    } else {
+        \App\Models\Pegawai::create([
+            'nip'      => $validated['nis_nip'],
+            'username' => $validated['username'],
+            'nama'     => $validated['nama'],
+            'no_hp'    => $validated['no_hp'],
+        ]);
+    }
+
+    Auth::login($akun);
     return redirect()->route('user.dashboard');
 })->name('register.post');
 
@@ -163,9 +183,9 @@ Route::prefix('super-admin')->name('system-admin.')->group(function () {
     Route::get('/users', [SystemAdminController::class, 'users'])->name('users');
     Route::post('/users/create', [SystemAdminController::class, 'createUser'])->name('create-user');
     
-    Route::put('/users/{id}', [SystemAdminController::class, 'updateUser'])->name('update-user');
+    Route::put('/users/{username}', [SystemAdminController::class, 'updateUser'])->name('update-user');
     
-    Route::delete('/users/{id}', [SystemAdminController::class, 'deleteUser'])->name('delete-user');
+    Route::delete('/users/{username}', [SystemAdminController::class, 'deleteUser'])->name('delete-user');
     Route::post('/warning/{id}', [SystemAdminController::class, 'sendWarning'])->name('send-warning');
 });
 

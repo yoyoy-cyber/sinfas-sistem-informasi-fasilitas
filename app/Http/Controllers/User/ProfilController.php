@@ -12,12 +12,12 @@ class ProfilController extends Controller
 {
     public function index()
     {
-        $user = Auth::user();
+        $user = Auth::user()->load(['siswa', 'pegawai']);
 
         $stats = [
-            'pending'         => PeminjamanRequest::where('user_id', $user->id)->where('status', 'pending')->count(),
-            'sedang_dipinjam' => PeminjamanRequest::where('user_id', $user->id)->whereIn('status', ['disetujui', 'dipinjam'])->count(),
-            'selesai'         => PeminjamanRequest::where('user_id', $user->id)->whereIn('status', ['selesai', 'dikembalikan'])->count(),
+            'pending'         => PeminjamanRequest::where('username', $user->username)->where('status', 'pending')->count(),
+            'sedang_dipinjam' => PeminjamanRequest::where('username', $user->username)->whereIn('status', ['disetujui', 'dipinjam'])->count(),
+            'selesai'         => PeminjamanRequest::where('username', $user->username)->whereIn('status', ['selesai', 'dikembalikan'])->count(),
         ];
 
         return view('user.profil', compact('user', 'stats'));
@@ -25,24 +25,41 @@ class ProfilController extends Controller
 
     public function update(Request $request)
     {
-        $user = Auth::user();
+        $user = Auth::user()->load(['siswa', 'pegawai']);
 
         $validated = $request->validate([
-            'nama_lengkap' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'no_hp' => 'required|string|max:20',
+            'nama'     => 'required|string|max:255',
+            'email'    => 'required|email|unique:akun,email,' . $user->username . ',username',
+            'no_hp'    => 'required|string|max:20',
+            'kelas'    => 'nullable|string|max:20',
+            'jabatan'  => 'nullable|string|max:100',
             'password' => 'nullable|string|min:6|confirmed',
         ]);
 
-        $user->nama_lengkap = $validated['nama_lengkap'];
+        // Update email di tabel akun
         $user->email = $validated['email'];
-        $user->no_hp = $validated['no_hp'];
-
         if (!empty($validated['password'])) {
             $user->password = Hash::make($validated['password']);
         }
-
         $user->save();
+
+        // Update data di tabel siswa
+        if ($user->siswa) {
+            $user->siswa->update([
+                'nama'  => $validated['nama'],
+                'no_hp' => $validated['no_hp'],
+                'kelas' => $validated['kelas'] ?? $user->siswa->kelas,
+            ]);
+        }
+
+        // Update data di tabel pegawai
+        if ($user->pegawai) {
+            $user->pegawai->update([
+                'nama'    => $validated['nama'],
+                'no_hp'   => $validated['no_hp'],
+                'jabatan' => $validated['jabatan'] ?? $user->pegawai->jabatan,
+            ]);
+        }
 
         return back()->with('success', 'Profil berhasil diperbarui!');
     }

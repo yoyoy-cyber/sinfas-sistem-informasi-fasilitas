@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title') - SINFAS Admin</title>
+    <link rel="icon" type="image/svg+xml" href="{{ asset('images/logo.svg') }}">
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/logo.png') }}">
+    @yield('styles')
     <style>
         * {
             margin: 0;
@@ -900,5 +905,6 @@
             this.style.borderColor = '#d1d5db';
         });
     </script>
+    @yield('scripts')
 </body>
 </html>

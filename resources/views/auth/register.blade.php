@@ -30,14 +30,24 @@
     <form action="{{ route('register.post') }}" method="POST" style="display: flex; flex-direction: column; gap: 1rem;">
         @csrf
 
-        <input type="text" name="nama_lengkap" placeholder="Nama Lengkap" value="{{ old('nama_lengkap') }}" required
+        <input type="text" name="nama" placeholder="Nama Lengkap" value="{{ old('nama') }}" required
             style="width: 100%; padding: 0.75rem 1.2rem; border-radius: 9999px; border: 2px solid #cbd5e1; font-size: 0.875rem; outline: none; transition: border-color 0.2s;">
 
-        <input type="text" name="nis_nip" placeholder="NIS / NIP" value="{{ old('nis_nip') }}" required
+        <input type="text" name="nis_nip" placeholder="NIS (Siswa) / NIP (Guru/Pegawai)" value="{{ old('nis_nip') }}" required
+            style="width: 100%; padding: 0.75rem 1.2rem; border-radius: 9999px; border: 2px solid #cbd5e1; font-size: 0.875rem; outline: none; transition: border-color 0.2s;">
+
+        <input type="text" name="username" placeholder="Username (untuk login)" value="{{ old('username') }}" required
             style="width: 100%; padding: 0.75rem 1.2rem; border-radius: 9999px; border: 2px solid #cbd5e1; font-size: 0.875rem; outline: none; transition: border-color 0.2s;">
 
         <input type="email" name="email" placeholder="Alamat Email" value="{{ old('email') }}" required
             style="width: 100%; padding: 0.75rem 1.2rem; border-radius: 9999px; border: 2px solid #cbd5e1; font-size: 0.875rem; outline: none; transition: border-color 0.2s;">
+
+        <input type="text" name="no_hp" placeholder="Nomor Telepon / WA" value="{{ old('no_hp') }}" required
+            style="width: 100%; padding: 0.75rem 1.2rem; border-radius: 9999px; border: 2px solid #cbd5e1; font-size: 0.875rem; outline: none; transition: border-color 0.2s;">
+
+        {{-- Kelas (muncul hanya untuk siswa, JS toggle) --}}
+        <input type="text" name="kelas" id="field-kelas" placeholder="Kelas (contoh: XII IPA 1)" value="{{ old('kelas') }}"
+            style="width: 100%; padding: 0.75rem 1.2rem; border-radius: 9999px; border: 2px solid #cbd5e1; font-size: 0.875rem; outline: none; transition: border-color 0.2s; display: none;">
 
         <input type="password" name="password" placeholder="Kata Sandi" required
             style="width: 100%; padding: 0.75rem 1.2rem; border-radius: 9999px; border: 2px solid #cbd5e1; font-size: 0.875rem; outline: none; transition: border-color 0.2s;">
@@ -45,18 +55,19 @@
         <input type="password" name="password_confirmation" placeholder="Konfirmasi Kata Sandi" required
             style="width: 100%; padding: 0.75rem 1.2rem; border-radius: 9999px; border: 2px solid #cbd5e1; font-size: 0.875rem; outline: none; transition: border-color 0.2s;">
 
-        <input type="text" name="no_hp" placeholder="Nomor Telepon / WA" value="{{ old('no_hp') }}" required
-            style="width: 100%; padding: 0.75rem 1.2rem; border-radius: 9999px; border: 2px solid #cbd5e1; font-size: 0.875rem; outline: none; transition: border-color 0.2s;">
-
         <!-- PILIHAN ROLE -->
         <div style="display: flex; gap: 1rem; justify-content: center; margin: 0.5rem 0; padding: 0.9rem; background: #eff6ff; border-radius: 14px; border: 2px solid #bfdbfe;">
             <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.95rem; font-weight: 700; color: #1e40af;">
-                <input type="radio" name="role" value="siswa" {{ old('role') === 'siswa' || !old('role') ? 'checked' : '' }} required style="width: 18px; height: 18px; cursor: pointer; accent-color: #2563eb;">
+                <input type="radio" name="role" value="siswa" id="role-siswa"
+                    {{ old('role') === 'siswa' || !old('role') ? 'checked' : '' }} required
+                    style="width: 18px; height: 18px; cursor: pointer; accent-color: #2563eb;">
                 Siswa
             </label>
             <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.95rem; font-weight: 700; color: #1e40af;">
-                <input type="radio" name="role" value="guru" {{ old('role') === 'guru' ? 'checked' : '' }} required style="width: 18px; height: 18px; cursor: pointer; accent-color: #2563eb;">
-                Guru
+                <input type="radio" name="role" value="pegawai" id="role-pegawai"
+                    {{ old('role') === 'pegawai' ? 'checked' : '' }} required
+                    style="width: 18px; height: 18px; cursor: pointer; accent-color: #2563eb;">
+                Guru / Pegawai
             </label>
         </div>
 
@@ -65,6 +76,19 @@
             DAFTAR SEKARANG
         </button>
     </form>
+
+    <script>
+        // Toggle field kelas berdasarkan role
+        function toggleKelas() {
+            const isSiswa = document.getElementById('role-siswa').checked;
+            const fieldKelas = document.getElementById('field-kelas');
+            fieldKelas.style.display = isSiswa ? 'block' : 'none';
+        }
+        document.getElementById('role-siswa').addEventListener('change', toggleKelas);
+        document.getElementById('role-pegawai').addEventListener('change', toggleKelas);
+        // Inisialisasi saat load
+        toggleKelas();
+    </script>
 
     <p style="text-align: center; color: #64748b; font-size: 0.825rem; margin-top: 1.5rem;">
         Sudah punya akun? 

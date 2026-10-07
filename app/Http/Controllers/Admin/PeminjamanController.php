@@ -84,7 +84,7 @@ class PeminjamanController extends Controller
     {
         // Untuk user biasa
         $peminjaman = PeminjamanRequest::with(['user', 'barang'])
-            ->where('user_id', Auth::id())
+            ->where('username', Auth::user()->username)
             ->orderBy('created_at', 'desc')
             ->get();
 
