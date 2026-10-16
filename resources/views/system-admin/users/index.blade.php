@@ -440,7 +440,8 @@
         box-shadow: 0 2px 8px rgba(234, 88, 12, 0.3);
     }
 
-    .role-guru {
+    .role-guru,
+    .role-pegawai {
         background: linear-gradient(135deg, #0d9488, #0f766e);
         box-shadow: 0 2px 8px rgba(13, 148, 136, 0.3);
     }
@@ -1099,9 +1100,9 @@
                 <span class="count-badge">{{ $roleCounts['siswa'] ?? 0 }}</span>
             </a>
             <a href="{{ route('system-admin.users', array_merge(request()->except('role'), ['role' => 'guru', 'page' => 1])) }}" 
-               class="role-pill {{ request('role') === 'guru' ? 'active' : '' }}">
+               class="role-pill {{ request('role') === 'guru' || request('role') === 'pegawai' ? 'active' : '' }}">
                 <span>Guru</span>
-                <span class="count-badge">{{ $roleCounts['guru'] ?? 0 }}</span>
+                <span class="count-badge">{{ $roleCounts['guru'] ?? $roleCounts['pegawai'] ?? 0 }}</span>
             </a>
             <a href="{{ route('system-admin.users', array_merge(request()->except('role'), ['role' => 'admin_sarana', 'page' => 1])) }}" 
                class="role-pill {{ request('role') === 'admin_sarana' ? 'active' : '' }}">
@@ -1168,9 +1169,15 @@
                                 <span style="color: #334155;">{{ $user->email }}</span>
                             </td>
                             <td>
-                                <span class="role-badge role-{{ $user->role }}">
-                                    {{ strtoupper(str_replace('_', ' ', $user->role)) }}
-                                </span>
+                                @if(in_array($user->role, ['guru', 'pegawai']))
+                                    <span class="role-badge role-guru">GURU</span>
+                                @elseif($user->role === 'admin_sarana')
+                                    <span class="role-badge role-admin_sarana">ADMIN SARANA</span>
+                                @elseif($user->role === 'admin_sistem')
+                                    <span class="role-badge role-admin_sistem">ADMIN SISTEM</span>
+                                @else
+                                    <span class="role-badge role-siswa">{{ strtoupper($user->role) }}</span>
+                                @endif
                             </td>
                             <td>
                                 <span style="color: #475569; font-weight: 500;">{{ $user->no_hp ?? '-' }}</span>
@@ -1220,9 +1227,15 @@
                                 <div style="font-size: 0.78rem; color: #64748b; font-family: monospace;">{{ $user->nis_nip }}</div>
                             </div>
                         </div>
-                        <span class="role-badge role-{{ $user->role }}">
-                            {{ strtoupper(str_replace('_', ' ', $user->role)) }}
-                        </span>
+                        @if(in_array($user->role, ['guru', 'pegawai']))
+                            <span class="role-badge role-guru">GURU</span>
+                        @elseif($user->role === 'admin_sarana')
+                            <span class="role-badge role-admin_sarana">ADMIN SARANA</span>
+                        @elseif($user->role === 'admin_sistem')
+                            <span class="role-badge role-admin_sistem">ADMIN SISTEM</span>
+                        @else
+                            <span class="role-badge role-siswa">{{ strtoupper($user->role) }}</span>
+                        @endif
                     </div>
 
                     <div class="user-card-grid">
@@ -1300,7 +1313,7 @@
             
             <div class="form-group">
                 <label>NIS / NIP</label>
-                <input type="text" name="nis_nip" placeholder="NIS (siswa) / NIP (pegawai)" required>
+                <input type="text" name="nis_nip" placeholder="NIS (siswa) / NIP (guru)" required>
             </div>
 
             <div class="form-group">
@@ -1328,7 +1341,7 @@
                 <select name="role" required>
                     <option value="">-- Pilih Role Pengguna --</option>
                     <option value="siswa">Siswa</option>
-                    <option value="pegawai">Guru / Pegawai</option>
+                    <option value="pegawai">Guru</option>
                     <option value="admin_sarana">Admin Sarana</option>
                     <option value="admin_sistem">Admin Sistem</option>
                 </select>
@@ -1372,7 +1385,7 @@
                 <label>Role / Peran Pengguna</label>
                 <select name="role" id="edit_role" required>
                     <option value="siswa">Siswa</option>
-                    <option value="pegawai">Guru / Pegawai</option>
+                    <option value="pegawai">Guru</option>
                     <option value="admin_sarana">Admin Sarana</option>
                     <option value="admin_sistem">Admin Sistem</option>
                 </select>
@@ -1439,7 +1452,8 @@
         const nama = button.getAttribute('data-nama');
         const email = button.getAttribute('data-email');
         const hp = button.getAttribute('data-hp');
-        const role = button.getAttribute('data-role');
+        let role = button.getAttribute('data-role');
+        if (role === 'guru') role = 'pegawai';
 
         document.getElementById('editForm').action = '/super-admin/users/' + username;
         document.getElementById('edit_nama').value = nama || '';

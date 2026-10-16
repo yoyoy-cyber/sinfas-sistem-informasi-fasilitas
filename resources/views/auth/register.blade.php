@@ -33,7 +33,7 @@
         <input type="text" name="nama" placeholder="Nama Lengkap" value="{{ old('nama') }}" required
             style="width: 100%; padding: 0.75rem 1.2rem; border-radius: 9999px; border: 2px solid #cbd5e1; font-size: 0.875rem; outline: none; transition: border-color 0.2s;">
 
-        <input type="text" name="nis_nip" placeholder="NIS (Siswa) / NIP (Guru/Pegawai)" value="{{ old('nis_nip') }}" required
+        <input type="text" name="nis_nip" placeholder="NIS (Siswa) / NIP (Guru)" value="{{ old('nis_nip') }}" required
             style="width: 100%; padding: 0.75rem 1.2rem; border-radius: 9999px; border: 2px solid #cbd5e1; font-size: 0.875rem; outline: none; transition: border-color 0.2s;">
 
         <input type="text" name="username" placeholder="Username (untuk login)" value="{{ old('username') }}" required
@@ -46,7 +46,7 @@
             style="width: 100%; padding: 0.75rem 1.2rem; border-radius: 9999px; border: 2px solid #cbd5e1; font-size: 0.875rem; outline: none; transition: border-color 0.2s;">
 
         {{-- Kelas (muncul hanya untuk siswa, JS toggle) --}}
-        <input type="text" name="kelas" id="field-kelas" placeholder="Kelas (contoh: XII IPA 1)" value="{{ old('kelas') }}"
+        <input type="text" name="kelas" id="field-kelas" placeholder="Kelas (contoh: XII RPL 1)" value="{{ old('kelas') }}"
             style="width: 100%; padding: 0.75rem 1.2rem; border-radius: 9999px; border: 2px solid #cbd5e1; font-size: 0.875rem; outline: none; transition: border-color 0.2s; display: none;">
 
         <input type="password" name="password" placeholder="Kata Sandi" required
@@ -67,7 +67,7 @@
                 <input type="radio" name="role" value="pegawai" id="role-pegawai"
                     {{ old('role') === 'pegawai' ? 'checked' : '' }} required
                     style="width: 18px; height: 18px; cursor: pointer; accent-color: #2563eb;">
-                Guru / Pegawai
+                Guru
             </label>
         </div>
 

@@ -429,7 +429,11 @@ class LaporanController extends Controller
             $query = PeminjamanRequest::with(['user', 'barang.kategori', 'pengembalian']);
 
             if ($rolePeminjam) {
-                $query->where('role_peminjam', $rolePeminjam);
+                if ($rolePeminjam === 'guru') {
+                    $query->whereIn('role_peminjam', ['guru', 'pegawai']);
+                } else {
+                    $query->where('role_peminjam', $rolePeminjam);
+                }
             }
 
             if ($startDate) {
@@ -559,7 +563,7 @@ class LaporanController extends Controller
                 'items' => $items,
                 'totalTerlambat' => $items->count(),
                 'totalSiswaTerlambat' => $items->where('role_peminjam', 'siswa')->count(),
-                'totalGuruTerlambat' => $items->where('role_peminjam', 'guru')->count(),
+                'totalGuruTerlambat' => $items->whereIn('role_peminjam', ['guru', 'pegawai'])->count(),
                 'chartData' => $chartData,
             ];
 

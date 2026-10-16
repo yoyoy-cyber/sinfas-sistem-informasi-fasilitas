@@ -64,19 +64,21 @@ Route::post('/register', function () {
         'password' => 'required|string|min:6|confirmed',
         'no_hp'    => 'required|string|max:20',
         'kelas'    => 'nullable|string|max:20',
-        'role'     => 'required|in:siswa,pegawai',
+        'role'     => 'required|in:siswa,pegawai,guru',
     ]);
+
+    $role = ($validated['role'] === 'guru') ? 'pegawai' : $validated['role'];
 
     // Buat akun di tabel akun (sesuai ERD)
     $akun = User::create([
         'username' => $validated['username'],
         'email'    => $validated['email'],
-        'role'     => $validated['role'],
+        'role'     => $role,
         'password' => Hash::make($validated['password']),
     ]);
 
     // Buat data siswa atau pegawai sesuai role
-    if ($validated['role'] === 'siswa') {
+    if ($role === 'siswa') {
         \App\Models\Siswa::create([
             'nis'      => $validated['nis_nip'],
             'username' => $validated['username'],

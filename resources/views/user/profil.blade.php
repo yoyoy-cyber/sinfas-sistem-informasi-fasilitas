@@ -220,7 +220,7 @@
         </div>
         <div class="profil-info-box">
             <h1>{{ $user->nama_lengkap }}</h1>
-            <span class="profil-role-badge">{{ str_replace('_', ' ', $user->role) }}</span>
+            <span class="profil-role-badge">{{ $user->role_label }}</span>
             <div class="profil-join-date">
                 Bergabung sejak {{ \Carbon\Carbon::parse($user->created_at)->isoFormat('DD MMMM YYYY') }}
             </div>

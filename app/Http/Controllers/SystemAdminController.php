@@ -29,10 +29,12 @@ class SystemAdminController extends Controller
      */
     public function index()
     {
+        $guruCount = User::whereIn('role', ['pegawai', 'guru'])->count();
         $stats = [
             'total_users'   => User::count(),
             'siswa'         => User::where('role', 'siswa')->count(),
-            'pegawai'       => User::where('role', 'pegawai')->count(),
+            'guru'          => $guruCount,
+            'pegawai'       => $guruCount,
             'admin_sarana'  => User::where('role', 'admin_sarana')->count(),
             'admin_sistem'  => User::where('role', 'admin_sistem')->count(),
             'total_barang'  => Barang::count(),
@@ -71,17 +73,24 @@ class SystemAdminController extends Controller
             });
         }
 
-        // Filter Role
-        if ($request->filled('role') && in_array($request->input('role'), ['siswa', 'pegawai', 'admin_sarana', 'admin_sistem'])) {
-            $query->where('role', $request->input('role'));
+        // Filter Role (mendukung guru maupun pegawai)
+        if ($request->filled('role')) {
+            $roleFilter = $request->input('role');
+            if (in_array($roleFilter, ['guru', 'pegawai'])) {
+                $query->whereIn('role', ['pegawai', 'guru']);
+            } elseif (in_array($roleFilter, ['siswa', 'admin_sarana', 'admin_sistem'])) {
+                $query->where('role', $roleFilter);
+            }
         }
 
         $users = $query->orderBy('created_at', 'desc')->paginate(15)->withQueryString();
 
+        $guruCount = User::whereIn('role', ['pegawai', 'guru'])->count();
         $roleCounts = [
             'all'          => User::count(),
             'siswa'        => User::where('role', 'siswa')->count(),
-            'pegawai'      => User::where('role', 'pegawai')->count(),
+            'guru'         => $guruCount,
+            'pegawai'      => $guruCount,
             'admin_sarana' => User::where('role', 'admin_sarana')->count(),
             'admin_sistem' => User::where('role', 'admin_sistem')->count(),
         ];
@@ -103,23 +112,25 @@ class SystemAdminController extends Controller
             'no_hp'    => 'required|string|max:20',
             'kelas'    => 'nullable|string|max:20',
             'jabatan'  => 'nullable|string|max:100',
-            'role'     => 'required|in:siswa,pegawai,admin_sarana,admin_sistem',
+            'role'     => 'required|in:siswa,pegawai,guru,admin_sarana,admin_sistem',
         ], [
             'username.unique' => 'Username sudah digunakan.',
             'email.unique'    => 'Email sudah digunakan oleh akun lain.',
             'password.min'    => 'Password minimal harus 6 karakter.',
         ]);
 
+        $role = ($validated['role'] === 'guru') ? 'pegawai' : $validated['role'];
+
         // Buat akun di tabel akun
         $user = User::create([
             'username' => $validated['username'],
             'email'    => $validated['email'],
-            'role'     => $validated['role'],
+            'role'     => $role,
             'password' => Hash::make($validated['password']),
         ]);
 
         // Buat data profil siswa atau pegawai
-        if ($validated['role'] === 'siswa') {
+        if ($role === 'siswa') {
             Siswa::create([
                 'nis'      => $validated['nis_nip'],
                 'username' => $validated['username'],
@@ -153,13 +164,15 @@ class SystemAdminController extends Controller
             'email'    => 'required|email|unique:akun,email,' . $user->username . ',username',
             'kelas'    => 'nullable|string|max:20',
             'jabatan'  => 'nullable|string|max:100',
-            'role'     => 'required|in:siswa,pegawai,admin_sarana,admin_sistem',
+            'role'     => 'required|in:siswa,pegawai,guru,admin_sarana,admin_sistem',
             'password' => 'nullable|string|min:6',
         ]);
 
+        $role = ($validated['role'] === 'guru') ? 'pegawai' : $validated['role'];
+
         // Update tabel akun
         $user->email = $validated['email'];
-        $user->role  = $validated['role'];
+        $user->role  = $role;
         if (!empty($validated['password'])) {
             $user->password = Hash::make($validated['password']);
         }

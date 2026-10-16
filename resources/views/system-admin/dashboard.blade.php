@@ -316,7 +316,7 @@
     }
 
     .badge-siswa { background: #e3f2fd; color: #1976d2; }
-    .badge-guru { background: #e8f5e9; color: #2e7d32; }
+    .badge-guru, .badge-pegawai { background: #e8f5e9; color: #2e7d32; }
     .badge-admin_sarana { background: #fff3e0; color: #e65100; }
     .badge-admin_sistem { background: #dbeafe; color: #1e40af; }
 
@@ -752,8 +752,8 @@
                                 <small style="color: #777;">{{ $user->nis_nip }}</small>
                             </div>
                         </div>
-                        <span class="badge-role badge-{{ $user->role }}">
-                            {{ str_replace('_', ' ', $user->role) }}
+                        <span class="badge-role badge-{{ in_array($user->role, ['guru', 'pegawai']) ? 'guru' : $user->role }}">
+                            {{ in_array($user->role, ['guru', 'pegawai']) ? 'Guru' : str_replace('_', ' ', $user->role) }}
                         </span>
                     </div>
                 @empty

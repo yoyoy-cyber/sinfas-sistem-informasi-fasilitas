@@ -114,6 +114,25 @@ class Akun extends Authenticatable
      * ---------------------------------------------------------------- */
     public function isPegawai(): bool
     {
-        return $this->role === 'pegawai';
+        return in_array($this->role, ['pegawai', 'guru']);
+    }
+
+    public function isGuru(): bool
+    {
+        return in_array($this->role, ['pegawai', 'guru']);
+    }
+
+    /* ----------------------------------------------------------------
+     * Accessor: role_label
+     * ---------------------------------------------------------------- */
+    public function getRoleLabelAttribute(): string
+    {
+        return match($this->role) {
+            'pegawai', 'guru' => 'Guru',
+            'siswa' => 'Siswa',
+            'admin_sarana' => 'Admin Sarana',
+            'admin_sistem' => 'Admin Sistem',
+            default => ucfirst(str_replace('_', ' ', $this->role ?? '')),
+        };
     }
 }
