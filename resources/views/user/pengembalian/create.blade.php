@@ -10,6 +10,9 @@
         padding: 2.5rem;
         box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         margin-bottom: 2rem;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
     }
 
     .btn-back {
@@ -55,9 +58,11 @@
 
     .form-layout {
         display: grid;
-        grid-template-columns: 360px 1fr;
+        grid-template-columns: 360px minmax(0, 1fr);
         gap: 2.5rem;
         align-items: start;
+        width: 100%;
+        max-width: 100%;
     }
 
     /* Info card */
@@ -352,10 +357,148 @@
 
     @media (max-width: 900px) {
         .form-layout {
-            grid-template-columns: 1fr;
+            grid-template-columns: minmax(0, 1fr);
+            gap: 1.75rem;
         }
         .condition-grid {
             grid-template-columns: 1fr;
+        }
+        .barang-info-card, form {
+            min-width: 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .form-container {
+            padding: 1.25rem 1rem;
+            border-radius: 16px;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-header {
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.9rem;
+        }
+
+        .form-header p {
+            font-size: 0.88rem;
+            line-height: 1.4;
+        }
+
+        .barang-info-card {
+            padding: 1.25rem 1rem;
+            border-radius: 14px;
+        }
+
+        .barang-image {
+            height: 170px;
+            margin-bottom: 1rem;
+        }
+
+        .barang-detail h3 {
+            font-size: 1.1rem;
+        }
+
+        .detail-row {
+            padding: 0.5rem 0;
+            font-size: 0.85rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-label {
+            font-size: 0.88rem;
+            margin-bottom: 0.45rem;
+        }
+
+        .form-input {
+            padding: 0.75rem 0.9rem;
+            font-size: 0.9rem;
+            border-radius: 10px;
+            box-sizing: border-box;
+        }
+
+        .condition-grid {
+            grid-template-columns: 1fr;
+            gap: 0.65rem;
+        }
+
+        .condition-card {
+            flex-direction: row;
+            text-align: left;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 0.85rem;
+            padding: 0.85rem 1rem;
+            border-radius: 12px;
+        }
+
+        .condition-card .icon {
+            font-size: 1.6rem;
+            margin-bottom: 0;
+            flex-shrink: 0;
+        }
+
+        .condition-card .title {
+            font-size: 0.92rem;
+            margin-bottom: 0.15rem;
+        }
+
+        .condition-card .desc {
+            font-size: 0.75rem;
+            line-height: 1.3;
+        }
+
+        .upload-box {
+            padding: 1.4rem 1rem;
+            border-radius: 12px;
+            box-sizing: border-box;
+        }
+
+        .upload-icon {
+            font-size: 2rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .upload-text {
+            font-size: 0.88rem;
+        }
+
+        .upload-subtext {
+            font-size: 0.75rem;
+            word-break: break-word;
+        }
+
+        .preview-image {
+            max-height: 200px;
+        }
+
+        .form-actions {
+            flex-direction: column-reverse;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+            padding-top: 1.25rem;
+            width: 100%;
+        }
+
+        .btn-submit {
+            width: 100%;
+            justify-content: center;
+            padding: 0.85rem 1.25rem;
+            font-size: 0.95rem;
+            box-sizing: border-box;
+        }
+
+        .btn-cancel {
+            width: 100%;
+            justify-content: center;
+            padding: 0.8rem 1.25rem;
+            font-size: 0.92rem;
+            box-sizing: border-box;
         }
     }
 </style>

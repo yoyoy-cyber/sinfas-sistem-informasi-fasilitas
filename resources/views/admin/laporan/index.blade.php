@@ -18,6 +18,9 @@
         grid-template-columns: repeat(4, 1fr);
         gap: 1rem;
         margin-bottom: 2rem;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
     }
 
     .report-tab-card {
@@ -32,6 +35,8 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        min-width: 0;
+        box-sizing: border-box;
     }
 
     .report-tab-card:hover {
@@ -97,6 +102,8 @@
         padding: 1.5rem 2rem;
         box-shadow: 0 4px 20px rgba(0,0,0,0.08);
         margin-bottom: 2rem;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .filter-header {
@@ -455,99 +462,21 @@
         opacity: 0.4;
     }
 
-    /* ===== MOBILE RESPONSIVE RULES ===== */
-    @media (max-width: 1024px) {
-        .report-tabs {
-            grid-template-columns: repeat(2, 1fr);
-        }
-    }
-
-    @media (max-width: 768px) {
-        .page-header {
-            flex-direction: column;
-            align-items: stretch;
-            gap: 0.8rem;
-        }
-
-        .page-title-section h2 {
-            font-size: 1.4rem;
-        }
-
-        .btn-print {
-            width: 100%;
-            justify-content: center;
-        }
-
-        .report-tabs {
-            grid-template-columns: 1fr;
-            gap: 0.75rem;
-        }
-
-        .filter-card {
-            padding: 1.25rem 1rem;
-        }
-
-        .filter-grid {
-            grid-template-columns: 1fr;
-            gap: 1rem;
-        }
-
-        .date-form-group {
-            grid-column: span 1 !important;
-        }
-
-        .date-header-row {
-            flex-direction: column;
-            align-items: flex-start !important;
-            gap: 0.4rem;
-        }
-
-        .quick-date-wrapper {
-            width: 100%;
-            display: flex;
-            gap: 0.3rem;
-        }
-
-        .btn-quick-date {
-            flex: 1;
-            text-align: center;
-        }
-
-        .date-inputs-wrapper {
-            flex-direction: column !important;
-            gap: 0.5rem !important;
-            align-items: stretch !important;
-        }
-
-        .date-separator {
-            display: none;
-        }
-
-        .summary-grid {
-            grid-template-columns: 1fr;
-            gap: 0.8rem;
-        }
-
-        .summary-card {
-            padding: 1rem 1.2rem;
-        }
-
-        .summary-val {
-            font-size: 1.5rem;
-        }
-
-        .table-container {
-            display: none;
-        }
-
-        .mobile-report-cards {
-            display: block;
-        }
+    /* Results Card Container */
+    .report-results-card {
+        background: white;
+        border-radius: 20px;
+        padding: 1.5rem 2rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        width: 100%;
+        box-sizing: border-box;
     }
 
     /* ===== ANALYTICS & CHART STYLING ===== */
     .analytics-section {
         margin-bottom: 2rem;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .analytics-card {
@@ -555,6 +484,10 @@
         border-radius: 20px;
         padding: 1.75rem 2rem;
         box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow: hidden;
     }
 
     .analytics-header {
@@ -609,6 +542,9 @@
         display: grid;
         grid-template-columns: 2fr 1.1fr;
         gap: 1.5rem;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
     }
 
     .chart-box {
@@ -618,6 +554,11 @@
         padding: 1.25rem 1.5rem;
         display: flex;
         flex-direction: column;
+        min-width: 0;
+        max-width: 100%;
+        width: 100%;
+        box-sizing: border-box;
+        overflow: hidden;
     }
 
     .chart-box-header {
@@ -651,17 +592,290 @@
         min-height: 280px;
         max-height: 320px;
         width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        overflow: hidden;
         display: flex;
         align-items: center;
         justify-content: center;
+        box-sizing: border-box;
     }
 
-    @media (max-width: 992px) {
+    .chart-canvas-wrapper canvas {
+        max-width: 100% !important;
+        max-height: 100% !important;
+        box-sizing: border-box;
+    }
+
+    /* ===== RESPONSIVE MEDIA QUERIES ===== */
+    @media (max-width: 1024px) {
+        .report-tabs {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
         .analytics-grid {
             grid-template-columns: 1fr;
         }
+
         .analytics-card {
-            padding: 1.25rem;
+            padding: 1.5rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .page-header {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0.8rem;
+            width: 100%;
+        }
+
+        .page-title-section h2 {
+            font-size: 1.35rem;
+            word-break: break-word;
+        }
+
+        .btn-print {
+            width: 100%;
+            justify-content: center;
+            box-sizing: border-box;
+            text-align: center;
+            padding: 0.75rem 1rem;
+        }
+
+        .report-tabs {
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+            width: 100%;
+            margin-bottom: 1.5rem;
+        }
+
+        .report-tab-card {
+            padding: 1rem 1.1rem;
+            border-radius: 14px;
+            min-width: 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .report-tab-title {
+            font-size: 0.95rem;
+            word-break: break-word;
+        }
+
+        .report-tab-desc {
+            font-size: 0.78rem;
+        }
+
+        .filter-card {
+            padding: 1.25rem 1rem;
+            border-radius: 16px;
+            margin-bottom: 1.5rem;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .filter-header {
+            margin-bottom: 1rem;
+            padding-bottom: 0.6rem;
+        }
+
+        .filter-title {
+            font-size: 0.98rem;
+        }
+
+        .filter-grid {
+            grid-template-columns: 1fr;
+            gap: 0.9rem;
+            width: 100%;
+        }
+
+        .date-form-group {
+            grid-column: span 1 !important;
+            width: 100%;
+        }
+
+        .date-header-row {
+            flex-direction: column;
+            align-items: flex-start !important;
+            gap: 0.4rem;
+            width: 100%;
+        }
+
+        .quick-date-wrapper {
+            width: 100%;
+            display: flex;
+            gap: 0.3rem;
+        }
+
+        .btn-quick-date {
+            flex: 1;
+            text-align: center;
+            font-size: 0.72rem;
+            padding: 0.35rem 0.2rem;
+            white-space: normal;
+        }
+
+        .date-inputs-wrapper {
+            flex-direction: column !important;
+            gap: 0.5rem !important;
+            align-items: stretch !important;
+            width: 100%;
+        }
+
+        .date-separator {
+            display: none;
+        }
+
+        .btn-filter {
+            width: 100%;
+            justify-content: center;
+            padding: 0.75rem 1rem;
+            font-size: 0.92rem;
+        }
+
+        .summary-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            width: 100%;
+        }
+
+        .summary-card {
+            padding: 1rem;
+            border-radius: 14px;
+            box-sizing: border-box;
+            min-width: 0;
+        }
+
+        .summary-val {
+            font-size: 1.4rem;
+        }
+
+        .summary-lbl {
+            font-size: 0.75rem;
+        }
+
+        .analytics-section {
+            margin-bottom: 1.5rem;
+            width: 100%;
+        }
+
+        .analytics-card {
+            padding: 1.25rem 1rem;
+            border-radius: 16px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .analytics-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+        }
+
+        .analytics-title {
+            font-size: 1.05rem;
+            word-break: break-word;
+        }
+
+        .analytics-subtitle {
+            font-size: 0.78rem;
+        }
+
+        .analytics-badge {
+            font-size: 0.72rem;
+            padding: 0.25rem 0.65rem;
+        }
+
+        .analytics-grid {
+            grid-template-columns: minmax(0, 1fr);
+            gap: 1rem;
+            width: 100%;
+        }
+
+        .chart-box {
+            padding: 1rem;
+            border-radius: 14px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .chart-canvas-wrapper {
+            min-height: 220px;
+            max-height: 260px;
+            width: 100%;
+            max-width: 100%;
+            overflow: hidden;
+        }
+
+        .report-results-card {
+            padding: 1.25rem 1rem;
+            border-radius: 16px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .table-header {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0.75rem;
+        }
+
+        .table-header h3 {
+            font-size: 1.05rem;
+            word-break: break-word;
+        }
+
+        .table-header .btn-print {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .table-container {
+            display: none;
+        }
+
+        .mobile-report-cards {
+            display: block;
+            width: 100%;
+        }
+
+        .report-item-card {
+            padding: 1rem;
+            border-radius: 14px;
+            box-sizing: border-box;
+            width: 100%;
+            margin-bottom: 0.85rem;
+        }
+
+        .report-item-title {
+            font-size: 0.92rem;
+            word-break: break-word;
+        }
+
+        .report-item-sub {
+            font-size: 0.75rem;
+            word-break: break-word;
+        }
+
+        .info-row {
+            min-width: 0;
+            overflow: hidden;
+            word-break: break-word;
+        }
+
+        .info-value {
+            font-size: 0.8rem;
+            word-break: break-word;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .summary-grid {
+            grid-template-columns: 1fr;
         }
     }
 </style>
@@ -949,7 +1163,7 @@
 </div>
 
 <!-- 4. HASIL LAPORAN (DESKTOP TABLE & MOBILE CARDS) -->
-<div style="background: white; border-radius: 20px; padding: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+<div class="report-results-card">
     <div class="table-header">
         <h3>
             @if($jenisLaporan === 'frekuensi')

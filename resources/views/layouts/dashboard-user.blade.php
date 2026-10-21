@@ -16,6 +16,11 @@
             box-sizing: border-box;
         }
 
+        html, body {
+            overflow-x: hidden;
+            max-width: 100vw;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, sans-serif;
             min-height: 100vh;
@@ -26,6 +31,9 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            width: 100%;
+            max-width: 100vw;
+            overflow-x: hidden;
         }
 
         /* ===== TOP NAVBAR ===== */
@@ -362,6 +370,9 @@
             flex: 1;
             min-height: calc(100vh - 64px);
             background: #030164;
+            min-width: 0;
+            max-width: 100%;
+            width: 100%;
         }
 
         /* ===== TOP BAR (Greeting) ===== */
@@ -389,6 +400,9 @@
 
         .content-area {
             padding: 2rem;
+            min-width: 0;
+            max-width: 100%;
+            box-sizing: border-box;
         }
 
         /* ===== CUSTOM LOGOUT MODAL ===== */
@@ -584,16 +598,22 @@
 
             .page-header {
                 flex-direction: column;
-                align-items: flex-start;
+                align-items: stretch;
                 gap: 0.8rem;
+                width: 100%;
             }
 
             .page-title-section h2, .page-header h2 {
-                font-size: 1.4rem;
+                font-size: 1.35rem;
+                word-break: break-word;
             }
 
             .btn-back {
                 margin-left: 0;
+                width: 100%;
+                justify-content: center;
+                box-sizing: border-box;
+                text-align: center;
             }
         }
     </style>

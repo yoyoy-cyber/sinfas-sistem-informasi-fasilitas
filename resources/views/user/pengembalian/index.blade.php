@@ -30,6 +30,9 @@
         padding: 2rem;
         box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         margin-bottom: 2rem;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
     }
 
     .section-header {
@@ -64,6 +67,8 @@
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
         gap: 1.5rem;
+        width: 100%;
+        max-width: 100%;
     }
 
     .borrow-card {
@@ -75,6 +80,9 @@
         justify-content: space-between;
         background: #f8fafc;
         transition: all 0.25s ease;
+        min-width: 0;
+        max-width: 100%;
+        box-sizing: border-box;
     }
 
     .borrow-card:hover {
@@ -286,6 +294,86 @@
     .alert-success { color: #166534; border-left: 4px solid #16a34a; }
     .alert-error { color: #991b1b; border-left: 4px solid #dc2626; }
     .alert-info { color: #1e40af; border-left: 4px solid #3b82f6; }
+
+    @media (max-width: 768px) {
+        .main-card {
+            padding: 1.25rem 1rem;
+            border-radius: 16px;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header {
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.7rem;
+        }
+
+        .section-header h3 {
+            font-size: 1.1rem;
+        }
+
+        .borrow-grid {
+            grid-template-columns: minmax(0, 1fr);
+            gap: 1rem;
+        }
+
+        .borrow-card {
+            padding: 1.1rem;
+            border-radius: 14px;
+        }
+
+        .borrow-top {
+            gap: 0.85rem;
+            margin-bottom: 0.85rem;
+        }
+
+        .borrow-img {
+            width: 70px;
+            height: 70px;
+        }
+
+        .borrow-info h4 {
+            font-size: 1rem;
+            word-break: break-word;
+        }
+
+        .borrow-info .meta {
+            font-size: 0.78rem;
+        }
+
+        .borrow-dates {
+            padding: 0.75rem 0.85rem;
+            font-size: 0.82rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn-return {
+            width: 100%;
+            justify-content: center;
+            font-size: 0.92rem;
+            padding: 0.8rem 1rem;
+            border-radius: 10px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .table-responsive {
+            margin: 0 -0.5rem;
+            padding: 0 0.5rem;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        th, td {
+            padding: 0.75rem 0.6rem;
+            font-size: 0.82rem;
+            white-space: nowrap;
+        }
+
+        .alert-box {
+            padding: 0.85rem 1rem;
+            font-size: 0.88rem;
+            border-radius: 10px;
+        }
+    }
 </style>
 @endsection
 

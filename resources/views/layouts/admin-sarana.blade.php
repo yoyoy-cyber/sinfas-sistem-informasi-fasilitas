@@ -16,6 +16,12 @@
             box-sizing: border-box;
         }
 
+        html, body {
+            overflow-x: hidden;
+            max-width: 100vw;
+            width: 100%;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, sans-serif;
             min-height: 100vh;
@@ -25,6 +31,9 @@
         .wrapper {
             display: flex;
             min-height: 100vh;
+            width: 100%;
+            max-width: 100vw;
+            overflow-x: hidden;
         }
 
         /* ===== SIDEBAR NAVY ===== */
@@ -252,6 +261,10 @@
             margin-left: 260px;
             padding: 2rem;
             min-height: 100vh;
+            min-width: 0;
+            max-width: 100%;
+            width: calc(100% - 260px);
+            box-sizing: border-box;
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #1e3a5f 100%);
         }
 
@@ -478,63 +491,7 @@
         .btn-modal-tidak { background: #6b7280; color: white; }
         .btn-modal-tidak:hover { background: #4b5563; box-shadow: 0 4px 15px rgba(107, 114, 128, 0.4); }
 
-        @media (max-width: 1200px) {
-            .stats-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-
-        @media (max-width: 768px) {
-            /* Sidebar hidden by default on mobile */
-            .sidebar {
-                top: 0;
-                left: 0;
-                bottom: 0;
-                height: 100vh;
-                height: 100dvh;
-                padding: 1.25rem 1rem 1.5rem 1rem;
-                transform: translateX(-100%);
-                z-index: 1001;
-                box-shadow: 4px 0 25px rgba(0,0,0,0.35);
-            }
-
-            /* Sidebar visible when toggled */
-            .sidebar.open {
-                transform: translateX(0);
-            }
-
-            .mobile-topbar {
-                display: flex;
-            }
-
-            .sidebar-close-btn {
-                display: flex;
-            }
-
-            .main-content {
-                margin-left: 0;
-            }
-
-            .stats-grid { grid-template-columns: 1fr; }
-
-            .page-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 0.8rem;
-            }
-
-            .page-title-section h2, .page-header h2 {
-                font-size: 1.4rem;
-            }
-
-            .btn-back {
-                margin-left: 0;
-            }
-
-            .main-content {
-                padding: 1rem;
-            }
-        }
-
-        /* ===== PAGE HEADER & BACK BUTTON ===== */
+        /* ===== PAGE HEADER & BACK BUTTON (DESKTOP) ===== */
         .page-header {
             display: flex;
             justify-content: space-between;
@@ -583,6 +540,73 @@
             box-shadow: 0 6px 20px rgba(0,0,0,0.15);
             background: #f8fafc;
             color: #1e40af;
+        }
+
+        @media (max-width: 1200px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            /* Sidebar hidden by default on mobile */
+            .sidebar {
+                top: 0;
+                left: 0;
+                bottom: 0;
+                height: 100vh;
+                height: 100dvh;
+                padding: 1.25rem 1rem 1.5rem 1rem;
+                transform: translateX(-100%);
+                z-index: 1001;
+                box-shadow: 4px 0 25px rgba(0,0,0,0.35);
+            }
+
+            /* Sidebar visible when toggled */
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .mobile-topbar {
+                display: flex;
+                width: 100%;
+                max-width: 100vw;
+                box-sizing: border-box;
+            }
+
+            .sidebar-close-btn {
+                display: flex;
+            }
+
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                max-width: 100vw;
+                min-width: 0;
+                padding: 1rem 0.85rem;
+                box-sizing: border-box;
+                overflow-x: hidden;
+            }
+
+            .stats-grid { grid-template-columns: 1fr; }
+
+            .page-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.8rem;
+                width: 100%;
+            }
+
+            .page-title-section h2, .page-header h2 {
+                font-size: 1.35rem;
+                word-break: break-word;
+            }
+
+            .btn-back {
+                margin-left: 0;
+                width: 100%;
+                justify-content: center;
+                box-sizing: border-box;
+                text-align: center;
+            }
         }
     </style>
     @yield('styles')

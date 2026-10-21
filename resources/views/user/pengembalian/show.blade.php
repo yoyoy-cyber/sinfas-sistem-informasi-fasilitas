@@ -205,8 +205,41 @@
     }
 
     @media (max-width: 768px) {
+        .detail-card {
+            padding: 1.25rem 1rem;
+            border-radius: 16px;
+            margin-bottom: 1.25rem;
+        }
+
+        .status-banner {
+            padding: 1rem;
+            gap: 0.75rem;
+            border-radius: 12px;
+            margin-bottom: 1.25rem;
+        }
+
+        .banner-icon {
+            font-size: 1.6rem;
+        }
+
+        .banner-text h4 {
+            font-size: 0.98rem;
+        }
+
+        .banner-text p {
+            font-size: 0.82rem;
+        }
+
         .detail-grid {
             grid-template-columns: 1fr;
+            gap: 1.25rem;
+        }
+
+        .btn-reapply {
+            width: 100%;
+            justify-content: center;
+            box-sizing: border-box;
+            text-align: center;
         }
     }
 </style>
