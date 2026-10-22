@@ -11,17 +11,13 @@ use App\Http\Controllers\SystemAdminController;
 
 /*
 |--------------------------------------------------------------------------
-| 1. ROUTE AUTH (LOGIN & REGISTER)
+| 1. ROUTE AUTH (LOGIN & LOGOUT)
 |--------------------------------------------------------------------------
 */
 
 Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
-
-Route::get('/register', function () {
-    return view('auth.register');
-})->name('register');
 
 Route::post('/login', function () {
     $request = request();
@@ -52,52 +48,6 @@ Route::post('/login', function () {
         'username' => 'Username, Email, atau Password salah!',
     ])->onlyInput('username');
 })->name('login.post');
-
-Route::post('/register', function () {
-    $request = request();
-    
-    $validated = $request->validate([
-        'nama'     => 'required|string|max:255',
-        'nis_nip'  => 'required|string|max:20',
-        'username' => 'required|string|max:50|unique:akun,username',
-        'email'    => 'required|email|unique:akun,email',
-        'password' => 'required|string|min:6|confirmed',
-        'no_hp'    => 'required|string|max:20',
-        'kelas'    => 'nullable|string|max:20',
-        'role'     => 'required|in:siswa,pegawai,guru',
-    ]);
-
-    $role = ($validated['role'] === 'guru') ? 'pegawai' : $validated['role'];
-
-    // Buat akun di tabel akun (sesuai ERD)
-    $akun = User::create([
-        'username' => $validated['username'],
-        'email'    => $validated['email'],
-        'role'     => $role,
-        'password' => Hash::make($validated['password']),
-    ]);
-
-    // Buat data siswa atau pegawai sesuai role
-    if ($role === 'siswa') {
-        \App\Models\Siswa::create([
-            'nis'      => $validated['nis_nip'],
-            'username' => $validated['username'],
-            'nama'     => $validated['nama'],
-            'kelas'    => $validated['kelas'] ?? null,
-            'no_hp'    => $validated['no_hp'],
-        ]);
-    } else {
-        \App\Models\Pegawai::create([
-            'nip'      => $validated['nis_nip'],
-            'username' => $validated['username'],
-            'nama'     => $validated['nama'],
-            'no_hp'    => $validated['no_hp'],
-        ]);
-    }
-
-    Auth::login($akun);
-    return redirect()->route('user.dashboard');
-})->name('register.post');
 
 Route::post('/logout', function () {
     Auth::logout();

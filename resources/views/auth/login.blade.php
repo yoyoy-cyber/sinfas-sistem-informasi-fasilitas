@@ -54,10 +54,5 @@
             MASUK
         </button>
     </form>
-
-    <p style="text-align: center; color: #64748b; font-size: 0.825rem; margin-top: 1.5rem;">
-        Belum punya akun? 
-        <a href="{{ route('register') }}" style="color: #2563eb; font-weight: 700; text-decoration: none;">Daftar Akun Baru →</a>
-    </p>
 </div>
 @endsection

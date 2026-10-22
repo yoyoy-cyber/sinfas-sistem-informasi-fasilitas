@@ -270,8 +270,7 @@
                         </a>
                     @endif
                 @else
-                    <a href="{{ route('login') }}" class="btn-nav btn-nav-ghost">Masuk</a>
-                    <a href="{{ route('register') }}" class="btn-nav btn-nav-primary">Daftar</a>
+                    <a href="{{ route('login') }}" class="btn-nav btn-nav-primary">Masuk</a>
                 @endauth
             </div>
         </div>
@@ -310,11 +309,10 @@
                         </a>
                     @endif
                 @else
-                    <a href="{{ route('register') }}" class="btn-hero btn-hero-primary">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                        Daftar Sekarang
+                    <a href="{{ route('login') }}" class="btn-hero btn-hero-primary">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                        Masuk ke SINFAS
                     </a>
-                    <a href="{{ route('login') }}" class="btn-hero btn-hero-outline">Sudah Punya Akun? Masuk</a>
                 @endauth
             </div>
         </div>
@@ -456,8 +454,8 @@
             <div class="steps-grid">
                 <div class="step-card">
                     <div class="step-number">1</div>
-                    <div class="step-title">Daftar &amp; Login</div>
-                    <div class="step-desc">Buat akun dengan NIS/NIP dan email, lalu masuk ke sistem SINFAS.</div>
+                    <div class="step-title">Login ke Sistem</div>
+                    <div class="step-desc">Masuk menggunakan akun yang telah didaftarkan pihak sekolah.</div>
                 </div>
                 <div class="step-card">
                     <div class="step-number">2</div>
@@ -540,8 +538,7 @@
                         <a href="{{ route('user.dashboard') }}" class="btn-hero btn-hero-primary">🏠 Kembali ke Dashboard</a>
                     @endif
                 @else
-                    <a href="{{ route('register') }}" class="btn-hero btn-hero-primary">✨ Daftar Sekarang — Gratis!</a>
-                    <a href="{{ route('login') }}" class="btn-hero btn-hero-outline">Sudah Punya Akun? Masuk</a>
+                    <a href="{{ route('login') }}" class="btn-hero btn-hero-primary">Masuk ke SINFAS Sekarang →</a>
                 @endauth
             </div>
         </div>

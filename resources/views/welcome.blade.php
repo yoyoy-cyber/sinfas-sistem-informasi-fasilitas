@@ -870,8 +870,7 @@
                         Ke Dashboard →
                     </a>
                 @else
-                    <a href="{{ route('login') }}" class="btn-nav-ghost">Masuk</a>
-                    <a href="{{ route('register') }}" class="btn-nav-primary">Daftar Akun</a>
+                    <a href="{{ route('login') }}" class="btn-nav-primary">Masuk</a>
                 @endauth
             </div>
         </div>
@@ -1174,7 +1173,6 @@
                 <h4>Akses Akun</h4>
                 <ul class="footer-links">
                     <li><a href="{{ route('login') }}">Login Siswa / Guru</a></li>
-                    <li><a href="{{ route('register') }}">Daftar Akun Baru</a></li>
                     <li><a href="{{ route('login') }}">Login Admin Sarana</a></li>
                 </ul>
             </div>
