@@ -27,7 +27,7 @@ class PeminjamanController extends Controller
             'tanggal_pinjam' => 'required|date|after_or_equal:today',
             'tanggal_kembali' => 'required|date|after:tanggal_pinjam',
             'no_telepon' => 'required|string|max:20',
-            'alasan_keperluan' => 'required|string|min:10|max:500',
+            'alasan_keperluan' => 'required|string|max:500',
         ]);
 
         // Ambil NIS jika user adalah siswa
