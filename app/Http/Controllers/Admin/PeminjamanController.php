@@ -58,18 +58,20 @@ class PeminjamanController extends Controller
         $peminjaman = PeminjamanRequest::findOrFail($id);
         $peminjaman->update(['status' => 'disetujui']);
 
-        // Record Penyetujuan (sesuai ERD2)
-        $adminStaff = \App\Models\StaffSarana::first();
-        $nip = Auth::user()->pegawai?->nip ?? $adminStaff?->nip ?? 'NIP002';
-        \App\Models\Penyetujuan::updateOrCreate(
-            ['peminjaman_id' => $peminjaman->id],
-            [
-                'id_peminjaman' => $peminjaman->id_peminjaman,
-                'nip'           => $nip,
-                'status'        => 'disetujui',
-                'catatan'       => 'Peminjaman disetujui oleh admin sarana.',
-            ]
-        );
+        // Record Penyetujuan (sesuai ERD2 jika tabel penyetujuan ada)
+        if (\Illuminate\Support\Facades\Schema::hasTable('penyetujuan')) {
+            $adminStaff = \Illuminate\Support\Facades\Schema::hasTable('staff_sarana') ? \App\Models\StaffSarana::first() : null;
+            $nip = Auth::user()->pegawai?->nip ?? $adminStaff?->nip ?? 'NIP002';
+            \App\Models\Penyetujuan::updateOrCreate(
+                ['peminjaman_id' => $peminjaman->id],
+                [
+                    'id_peminjaman' => $peminjaman->id_peminjaman ?? ('PMJ-' . str_pad($peminjaman->id, 6, '0', STR_PAD_LEFT)),
+                    'nip'           => $nip,
+                    'status'        => 'disetujui',
+                    'catatan'       => 'Peminjaman disetujui oleh admin sarana.',
+                ]
+            );
+        }
 
         // Update stok barang
         $barang = $peminjaman->barang;
@@ -90,18 +92,20 @@ class PeminjamanController extends Controller
             'alasan_penolakan' => $request->alasan,
         ]);
 
-        // Record Penyetujuan (sesuai ERD2)
-        $adminStaff = \App\Models\StaffSarana::first();
-        $nip = Auth::user()->pegawai?->nip ?? $adminStaff?->nip ?? 'NIP002';
-        \App\Models\Penyetujuan::updateOrCreate(
-            ['peminjaman_id' => $peminjaman->id],
-            [
-                'id_peminjaman' => $peminjaman->id_peminjaman,
-                'nip'           => $nip,
-                'status'        => 'ditolak',
-                'catatan'       => $request->alasan ?: 'Peminjaman ditolak.',
-            ]
-        );
+        // Record Penyetujuan (sesuai ERD2 jika tabel penyetujuan ada)
+        if (\Illuminate\Support\Facades\Schema::hasTable('penyetujuan')) {
+            $adminStaff = \Illuminate\Support\Facades\Schema::hasTable('staff_sarana') ? \App\Models\StaffSarana::first() : null;
+            $nip = Auth::user()->pegawai?->nip ?? $adminStaff?->nip ?? 'NIP002';
+            \App\Models\Penyetujuan::updateOrCreate(
+                ['peminjaman_id' => $peminjaman->id],
+                [
+                    'id_peminjaman' => $peminjaman->id_peminjaman ?? ('PMJ-' . str_pad($peminjaman->id, 6, '0', STR_PAD_LEFT)),
+                    'nip'           => $nip,
+                    'status'        => 'ditolak',
+                    'catatan'       => $request->alasan ?: 'Peminjaman ditolak.',
+                ]
+            );
+        }
 
         return back()->with('success', 'Peminjaman berhasil ditolak!');
     }

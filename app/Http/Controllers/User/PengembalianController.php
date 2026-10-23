@@ -100,28 +100,35 @@ class PengembalianController extends Controller
         $lastId = \App\Models\Pengembalian::max('id') ?? 0;
         $kodeKembali = 'KB-' . str_pad($lastId + 1, 6, '0', STR_PAD_LEFT);
 
+        // Data pengembalian standar
+        $dataPengembalian = [
+            'username'             => Auth::user()->username, // FK → akun sesuai ERD
+            'kode_kembali'         => $kodeKembali,
+            'kode_barang'          => $peminjaman->kode_barang,
+            'nama_barang'          => $peminjaman->nama_barang,
+            'tanggal_pengembalian' => $validated['tanggal_pengembalian'],
+            'kondisi_pengembalian' => $validated['kondisi_pengembalian'],
+            'catatan_kondisi'      => $validated['catatan_kondisi'],
+            'bukti_foto'           => $fotoPath,
+            'status'               => 'pending',
+            'alasan_penolakan'     => null,
+            'verifikasi_oleh'      => null,
+            'tanggal_verifikasi'   => null,
+        ];
+
+        // Jika kolom ERD2 sudah ada di database (setelah migrasi), ikut simpan
+        if (\Illuminate\Support\Facades\Schema::hasColumn('pengembalian', 'id_peminjaman')) {
+            $dataPengembalian['id_peminjaman']    = $peminjaman->id_peminjaman ?? ('PMJ-' . str_pad($peminjaman->id, 6, '0', STR_PAD_LEFT));
+            $dataPengembalian['kode_pinjam']      = $peminjaman->id_peminjaman ?? ('PMJ-' . str_pad($peminjaman->id, 6, '0', STR_PAD_LEFT));
+            $dataPengembalian['kondisi_barang']   = $validated['kondisi_pengembalian'];
+            $dataPengembalian['catatan']          = $validated['catatan_kondisi'];
+            $dataPengembalian['bukti_foto_video'] = $fotoPath;
+        }
+
         // Simpan atau update data pengembalian
         $pengembalian = Pengembalian::updateOrCreate(
             ['peminjaman_id' => $peminjaman->id],
-            [
-                'id_peminjaman'        => $peminjaman->id_peminjaman,
-                'kode_pinjam'          => $peminjaman->id_peminjaman,
-                'username'             => Auth::user()->username, // FK → akun sesuai ERD
-                'kode_kembali'         => $kodeKembali,
-                'kode_barang'          => $peminjaman->kode_barang,
-                'nama_barang'          => $peminjaman->nama_barang,
-                'tanggal_pengembalian' => $validated['tanggal_pengembalian'],
-                'kondisi_pengembalian' => $validated['kondisi_pengembalian'],
-                'kondisi_barang'       => $validated['kondisi_pengembalian'],
-                'catatan_kondisi'      => $validated['catatan_kondisi'],
-                'catatan'              => $validated['catatan_kondisi'],
-                'bukti_foto'           => $fotoPath,
-                'bukti_foto_video'     => $fotoPath,
-                'status'               => 'pending',
-                'alasan_penolakan'     => null,
-                'verifikasi_oleh'      => null,
-                'tanggal_verifikasi'   => null,
-            ]
+            $dataPengembalian
         );
 
         return redirect()->route('user.pengembalian.index')

@@ -40,9 +40,11 @@ class PeminjamanRequest extends Model
     protected static function booted()
     {
         static::creating(function ($model) {
-            if (empty($model->id_peminjaman)) {
-                $maxId = static::max('id') ?? 0;
-                $model->id_peminjaman = 'PMJ-' . str_pad($maxId + 1, 6, '0', STR_PAD_LEFT);
+            if (\Illuminate\Support\Facades\Schema::hasColumn('peminjaman_requests', 'id_peminjaman')) {
+                if (empty($model->id_peminjaman)) {
+                    $maxId = static::max('id') ?? 0;
+                    $model->id_peminjaman = 'PMJ-' . str_pad($maxId + 1, 6, '0', STR_PAD_LEFT);
+                }
             }
         });
     }

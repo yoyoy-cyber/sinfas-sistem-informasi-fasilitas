@@ -33,9 +33,8 @@ class PeminjamanController extends Controller
         // Ambil NIS jika user adalah siswa
         $nis = $user->siswa?->nis ?? null;
 
-        PeminjamanRequest::create([
+        $dataPinjam = [
             'username'         => $user->username,    // FK → akun.username (ERD)
-            'id_akun'          => $user->id_akun,     // FK → akun.id_akun (ERD2)
             'nis'              => $nis,               // FK → siswa.nis (ERD)
             'kode_barang'      => $barang->kode_barang,
             'nama_barang'      => $barang->nama_barang,
@@ -46,7 +45,13 @@ class PeminjamanController extends Controller
             'no_telepon'       => $validated['no_telepon'],
             'alasan_keperluan' => $validated['alasan_keperluan'],
             'status'           => 'pending',
-        ]);
+        ];
+
+        if (\Illuminate\Support\Facades\Schema::hasColumn('peminjaman_requests', 'id_akun')) {
+            $dataPinjam['id_akun'] = $user->id_akun;
+        }
+
+        PeminjamanRequest::create($dataPinjam);
 
         return redirect()->route('user.status')
             ->with('success', 'Pengajuan peminjaman berhasil dikirim! Menunggu persetujuan admin.')
