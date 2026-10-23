@@ -58,6 +58,19 @@ class PeminjamanController extends Controller
         $peminjaman = PeminjamanRequest::findOrFail($id);
         $peminjaman->update(['status' => 'disetujui']);
 
+        // Record Penyetujuan (sesuai ERD2)
+        $adminStaff = \App\Models\StaffSarana::first();
+        $nip = Auth::user()->pegawai?->nip ?? $adminStaff?->nip ?? 'NIP002';
+        \App\Models\Penyetujuan::updateOrCreate(
+            ['peminjaman_id' => $peminjaman->id],
+            [
+                'id_peminjaman' => $peminjaman->id_peminjaman,
+                'nip'           => $nip,
+                'status'        => 'disetujui',
+                'catatan'       => 'Peminjaman disetujui oleh admin sarana.',
+            ]
+        );
+
         // Update stok barang
         $barang = $peminjaman->barang;
         if ($barang) {
@@ -76,6 +89,19 @@ class PeminjamanController extends Controller
             'status' => 'ditolak',
             'alasan_penolakan' => $request->alasan,
         ]);
+
+        // Record Penyetujuan (sesuai ERD2)
+        $adminStaff = \App\Models\StaffSarana::first();
+        $nip = Auth::user()->pegawai?->nip ?? $adminStaff?->nip ?? 'NIP002';
+        \App\Models\Penyetujuan::updateOrCreate(
+            ['peminjaman_id' => $peminjaman->id],
+            [
+                'id_peminjaman' => $peminjaman->id_peminjaman,
+                'nip'           => $nip,
+                'status'        => 'ditolak',
+                'catatan'       => $request->alasan ?: 'Peminjaman ditolak.',
+            ]
+        );
 
         return back()->with('success', 'Peminjaman berhasil ditolak!');
     }

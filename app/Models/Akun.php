@@ -21,10 +21,16 @@ class Akun extends Authenticatable
     protected $keyType    = 'string';
 
     protected $fillable = [
+        'id_akun',
         'username',
+        'nama',
         'email',
+        'nomor_kontak',
+        'foto',
         'role',
         'password',
+        'is_active',
+        'must_change_password',
     ];
 
     protected $hidden = [

@@ -20,6 +20,7 @@ class Barang extends Model
         'nama_barang',
         'status',
         'gambar',           // ← PASTIKAN ADA INI!
+        'foto',             // ERD 2 compatibility
         'deskripsi',
         'merk_model',
         'no_seri_pabrik',
@@ -31,6 +32,22 @@ class Barang extends Model
         'jumlah_rusak_berat',
         'keterangan',
     ];
+
+    /**
+     * ERD2 compatibility: accessor for foto
+     */
+    public function getFotoAttribute($value)
+    {
+        return $value ?: $this->attributes['gambar'] ?? null;
+    }
+
+    /**
+     * ERD2 compatibility: accessor for gambar
+     */
+    public function getGambarAttribute($value)
+    {
+        return $value ?: $this->attributes['foto'] ?? null;
+    }
 
     public function kategori()
     {

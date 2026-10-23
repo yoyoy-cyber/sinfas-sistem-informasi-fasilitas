@@ -104,14 +104,19 @@ class PengembalianController extends Controller
         $pengembalian = Pengembalian::updateOrCreate(
             ['peminjaman_id' => $peminjaman->id],
             [
+                'id_peminjaman'        => $peminjaman->id_peminjaman,
+                'kode_pinjam'          => $peminjaman->id_peminjaman,
                 'username'             => Auth::user()->username, // FK → akun sesuai ERD
                 'kode_kembali'         => $kodeKembali,
                 'kode_barang'          => $peminjaman->kode_barang,
                 'nama_barang'          => $peminjaman->nama_barang,
                 'tanggal_pengembalian' => $validated['tanggal_pengembalian'],
                 'kondisi_pengembalian' => $validated['kondisi_pengembalian'],
+                'kondisi_barang'       => $validated['kondisi_pengembalian'],
                 'catatan_kondisi'      => $validated['catatan_kondisi'],
+                'catatan'              => $validated['catatan_kondisi'],
                 'bukti_foto'           => $fotoPath,
+                'bukti_foto_video'     => $fotoPath,
                 'status'               => 'pending',
                 'alasan_penolakan'     => null,
                 'verifikasi_oleh'      => null,

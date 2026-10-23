@@ -18,6 +18,8 @@ class Pengembalian extends Model
 
     protected $fillable = [
         'peminjaman_id',
+        'id_peminjaman', // ERD2
+        'kode_pinjam',   // ERD2
         'user_id',       // backward compat
         'username',      // FK → akun.username (sesuai ERD)
         'kode_kembali',  // kode unik sesuai ERD
@@ -25,14 +27,32 @@ class Pengembalian extends Model
         'nama_barang',
         'tanggal_pengembalian',
         'kondisi_pengembalian',
+        'kondisi_barang',      // ERD2 alias
         'catatan_kondisi',
+        'catatan',             // ERD2 alias
         'bukti_foto',
+        'bukti_foto_video',    // ERD2 alias
         'keterangan',
         'status',
         'alasan_penolakan',
         'verifikasi_oleh',
         'tanggal_verifikasi',
     ];
+
+    public function getKondisiBarangAttribute($value)
+    {
+        return $value ?: $this->attributes['kondisi_pengembalian'] ?? null;
+    }
+
+    public function getCatatanAttribute($value)
+    {
+        return $value ?: $this->attributes['catatan_kondisi'] ?? null;
+    }
+
+    public function getBuktiFotoVideoAttribute($value)
+    {
+        return $value ?: $this->attributes['bukti_foto'] ?? null;
+    }
 
     protected $casts = [
         'tanggal_pengembalian' => 'date',

@@ -35,6 +35,7 @@ class PeminjamanController extends Controller
 
         PeminjamanRequest::create([
             'username'         => $user->username,    // FK → akun.username (ERD)
+            'id_akun'          => $user->id_akun,     // FK → akun.id_akun (ERD2)
             'nis'              => $nis,               // FK → siswa.nis (ERD)
             'kode_barang'      => $barang->kode_barang,
             'nama_barang'      => $barang->nama_barang,

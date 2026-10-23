@@ -67,6 +67,7 @@ class BarangController extends Controller
             $namaFile = time() . '_' . str_replace(' ', '_', $request->nama_barang) . '.' . $gambar->getClientOriginalExtension();
             $gambar->storeAs('public/barang', $namaFile);
             $validated['gambar'] = 'barang/' . $namaFile;
+            $validated['foto']   = 'barang/' . $namaFile;
         }
 
         $barang = Barang::create($validated);
@@ -115,6 +116,7 @@ class BarangController extends Controller
             $namaFile = time() . '_' . str_replace(' ', '_', $request->nama_barang) . '.' . $gambar->getClientOriginalExtension();
             $gambar->storeAs('public/barang', $namaFile);
             $validated['gambar'] = 'barang/' . $namaFile;
+            $validated['foto']   = 'barang/' . $namaFile;
         }
 
         $barang->update($validated);
