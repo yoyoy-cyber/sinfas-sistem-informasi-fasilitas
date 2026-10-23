@@ -176,6 +176,44 @@ Route::get('/storage-link', function () {
     }
 });
 
+// Sinkronkan semua file dari storage/app/public ke public/storage (DirectAdmin / cPanel tanpa SSH)
+Route::get('/storage-sync', function () {
+    $source = storage_path('app/public');
+    $dest = public_path('storage');
+
+    if (!file_exists($source)) {
+        return 'Folder storage/app/public belum ada.';
+    }
+
+    if (!file_exists($dest)) {
+        @mkdir($dest, 0755, true);
+    }
+
+    $count = 0;
+    try {
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($source, RecursiveDirectoryIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::SELF_FIRST
+        );
+
+        foreach ($iterator as $item) {
+            $subPath = $iterator->getSubPathName();
+            $target = $dest . DIRECTORY_SEPARATOR . $subPath;
+            if ($item->isDir()) {
+                if (!file_exists($target)) {
+                    @mkdir($target, 0755, true);
+                }
+            } else {
+                @copy($item->getRealPath(), $target);
+                $count++;
+            }
+        }
+        return "Berhasil menyinkronkan {$count} file ke folder public/storage! <br><br>Foto bukti pengembalian dan gambar barang sekarang sudah aktif dan bisa dibuka.<br><br><a href='" . url('/') . "'>Kembali ke Web</a>";
+    } catch (\Throwable $e) {
+        return 'Error sinkronisasi: ' . $e->getMessage();
+    }
+});
+
 // Fallback jika web hosting belum / tidak support symlink public/storage
 Route::get('/storage/{path}', function ($path) {
     $fullPath = storage_path('app/public/' . $path);

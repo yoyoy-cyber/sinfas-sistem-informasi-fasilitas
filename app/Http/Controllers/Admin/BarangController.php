@@ -66,6 +66,16 @@ class BarangController extends Controller
             $gambar = $request->file('gambar');
             $namaFile = time() . '_' . str_replace(' ', '_', $request->nama_barang) . '.' . $gambar->getClientOriginalExtension();
             $gambar->storeAs('public/barang', $namaFile);
+
+            // Simpan salinan ke public/storage/barang (kompatibel cPanel/DirectAdmin tanpa symlink)
+            try {
+                $publicFolder = public_path('storage/barang');
+                if (!file_exists($publicFolder)) {
+                    @mkdir($publicFolder, 0755, true);
+                }
+                @copy(storage_path('app/public/barang/' . $namaFile), $publicFolder . '/' . $namaFile);
+            } catch (\Throwable $e) {}
+
             $validated['gambar'] = 'barang/' . $namaFile;
             if (\Illuminate\Support\Facades\Schema::hasColumn('barang', 'foto')) {
                 $validated['foto'] = 'barang/' . $namaFile;
@@ -117,6 +127,16 @@ class BarangController extends Controller
             $gambar = $request->file('gambar');
             $namaFile = time() . '_' . str_replace(' ', '_', $request->nama_barang) . '.' . $gambar->getClientOriginalExtension();
             $gambar->storeAs('public/barang', $namaFile);
+
+            // Simpan salinan ke public/storage/barang (kompatibel cPanel/DirectAdmin tanpa symlink)
+            try {
+                $publicFolder = public_path('storage/barang');
+                if (!file_exists($publicFolder)) {
+                    @mkdir($publicFolder, 0755, true);
+                }
+                @copy(storage_path('app/public/barang/' . $namaFile), $publicFolder . '/' . $namaFile);
+            } catch (\Throwable $e) {}
+
             $validated['gambar'] = 'barang/' . $namaFile;
             if (\Illuminate\Support\Facades\Schema::hasColumn('barang', 'foto')) {
                 $validated['foto'] = 'barang/' . $namaFile;
