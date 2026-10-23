@@ -161,3 +161,30 @@ Route::get('/', function () {
 Route::get('/about', function () {
     return view('about');
 })->name('about');
+
+/*
+|--------------------------------------------------------------------------
+| STORAGE LINK & FILE SERVING FALLBACK (Untuk Shared Hosting / cPanel)
+|--------------------------------------------------------------------------
+*/
+Route::get('/storage-link', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('storage:link');
+        return 'Storage link berhasil dibuat! <br><br><a href="' . url('/') . '">Kembali ke Beranda</a>';
+    } catch (\Exception $e) {
+        return 'Gagal membuat storage link: ' . $e->getMessage();
+    }
+});
+
+// Fallback jika web hosting belum / tidak support symlink public/storage
+Route::get('/storage/{path}', function ($path) {
+    $fullPath = storage_path('app/public/' . $path);
+    $realFullPath = realpath($fullPath);
+    $realBasePath = realpath(storage_path('app/public'));
+
+    if ($realFullPath && $realBasePath && str_starts_with($realFullPath, $realBasePath) && file_exists($realFullPath)) {
+        return response()->file($realFullPath);
+    }
+
+    abort(404);
+})->where('path', '.*');
