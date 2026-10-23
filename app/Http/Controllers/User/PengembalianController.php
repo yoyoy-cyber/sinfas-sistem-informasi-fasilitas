@@ -94,13 +94,18 @@ class PengembalianController extends Controller
             $fileName = 'kembali_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
             $file->storeAs('public/pengembalian', $fileName);
 
-            // Simpan salinan langsung ke public/storage/pengembalian (kompatibel cPanel/DirectAdmin tanpa symlink)
+            // Simpan salinan langsung ke public_html/storage/pengembalian (DirectAdmin) dan public/storage/pengembalian
             try {
-                $publicFolder = public_path('storage/pengembalian');
-                if (!file_exists($publicFolder)) {
-                    @mkdir($publicFolder, 0755, true);
+                $targetFolders = array_unique([
+                    public_path('storage/pengembalian'),
+                    base_path('public_html/storage/pengembalian'),
+                ]);
+                foreach ($targetFolders as $folder) {
+                    if (!file_exists($folder)) {
+                        @mkdir($folder, 0755, true);
+                    }
+                    @copy(storage_path('app/public/pengembalian/' . $fileName), $folder . '/' . $fileName);
                 }
-                @copy(storage_path('app/public/pengembalian/' . $fileName), $publicFolder . '/' . $fileName);
             } catch (\Throwable $e) {}
 
             $fotoPath = 'pengembalian/' . $fileName;

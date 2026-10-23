@@ -12,7 +12,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Deteksi jika public_html digunakan (DirectAdmin / cPanel hosting)
+        if (is_dir(base_path('public_html'))) {
+            $this->app->usePublicPath(base_path('public_html'));
+        }
     }
 
     /**

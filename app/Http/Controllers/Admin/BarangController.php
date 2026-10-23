@@ -67,13 +67,18 @@ class BarangController extends Controller
             $namaFile = time() . '_' . str_replace(' ', '_', $request->nama_barang) . '.' . $gambar->getClientOriginalExtension();
             $gambar->storeAs('public/barang', $namaFile);
 
-            // Simpan salinan ke public/storage/barang (kompatibel cPanel/DirectAdmin tanpa symlink)
+            // Simpan salinan ke public_html/storage/barang (DirectAdmin) dan public/storage/barang
             try {
-                $publicFolder = public_path('storage/barang');
-                if (!file_exists($publicFolder)) {
-                    @mkdir($publicFolder, 0755, true);
+                $targetFolders = array_unique([
+                    public_path('storage/barang'),
+                    base_path('public_html/storage/barang'),
+                ]);
+                foreach ($targetFolders as $folder) {
+                    if (!file_exists($folder)) {
+                        @mkdir($folder, 0755, true);
+                    }
+                    @copy(storage_path('app/public/barang/' . $namaFile), $folder . '/' . $namaFile);
                 }
-                @copy(storage_path('app/public/barang/' . $namaFile), $publicFolder . '/' . $namaFile);
             } catch (\Throwable $e) {}
 
             $validated['gambar'] = 'barang/' . $namaFile;
@@ -128,13 +133,18 @@ class BarangController extends Controller
             $namaFile = time() . '_' . str_replace(' ', '_', $request->nama_barang) . '.' . $gambar->getClientOriginalExtension();
             $gambar->storeAs('public/barang', $namaFile);
 
-            // Simpan salinan ke public/storage/barang (kompatibel cPanel/DirectAdmin tanpa symlink)
+            // Simpan salinan ke public_html/storage/barang (DirectAdmin) dan public/storage/barang
             try {
-                $publicFolder = public_path('storage/barang');
-                if (!file_exists($publicFolder)) {
-                    @mkdir($publicFolder, 0755, true);
+                $targetFolders = array_unique([
+                    public_path('storage/barang'),
+                    base_path('public_html/storage/barang'),
+                ]);
+                foreach ($targetFolders as $folder) {
+                    if (!file_exists($folder)) {
+                        @mkdir($folder, 0755, true);
+                    }
+                    @copy(storage_path('app/public/barang/' . $namaFile), $folder . '/' . $namaFile);
                 }
-                @copy(storage_path('app/public/barang/' . $namaFile), $publicFolder . '/' . $namaFile);
             } catch (\Throwable $e) {}
 
             $validated['gambar'] = 'barang/' . $namaFile;
