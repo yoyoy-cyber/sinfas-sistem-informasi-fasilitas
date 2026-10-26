@@ -367,16 +367,292 @@
         font-size: 0.95rem;
     }
 
+    /* ===== PAGINATION STYLING ===== */
+    .pagination-wrapper {
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+        background: white;
+        border-radius: 18px;
+        padding: 1.2rem 1.5rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        border: 1px solid #e2e8f0;
+    }
+
+    .pagination-info {
+        font-size: 0.9rem;
+        color: #64748b;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        flex-wrap: wrap;
+    }
+
+    .pagination-info strong {
+        color: #0f172a;
+        font-weight: 700;
+    }
+
+    .per-page-selector {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.85rem;
+        color: #64748b;
+    }
+
+    .per-page-select {
+        padding: 0.4rem 0.75rem;
+        border-radius: 10px;
+        border: 1.5px solid #cbd5e1;
+        background: #f8fafc;
+        color: #1e293b;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        outline: none;
+        transition: all 0.2s;
+    }
+
+    .per-page-select:focus, .per-page-select:hover {
+        border-color: #2563eb;
+        background: white;
+    }
+
+    .pagination-controls {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        flex-wrap: wrap;
+    }
+
+    .page-btn {
+        min-width: 40px;
+        height: 40px;
+        padding: 0 0.75rem;
+        border-radius: 10px;
+        border: 1.5px solid #e2e8f0;
+        background: white;
+        color: #475569;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.35rem;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        user-select: none;
+        text-decoration: none;
+    }
+
+    .page-btn:hover:not(:disabled):not(.active) {
+        border-color: #3b82f6;
+        color: #1e40af;
+        background: #eff6ff;
+        transform: translateY(-2px);
+        box-shadow: 0 3px 10px rgba(59, 130, 246, 0.15);
+    }
+
+    .page-btn.active {
+        background: linear-gradient(135deg, #1e40af, #2563eb);
+        color: white;
+        border-color: #1e40af;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+        font-weight: 700;
+    }
+
+    .page-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        background: #f8fafc;
+        border-color: #e2e8f0;
+        color: #94a3b8;
+        transform: none !important;
+        box-shadow: none !important;
+    }
+
+    .page-btn.btn-nav {
+        padding: 0 0.9rem;
+        font-weight: 600;
+    }
+
+    .page-ellipsis {
+        min-width: 32px;
+        height: 40px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #94a3b8;
+        font-weight: 700;
+    }
+
     /* ===== RESPONSIVE ===== */
     @media (max-width: 1200px) {
         .items-grid { grid-template-columns: repeat(2, 1fr); }
-        .welcome-banner { flex-direction: column; text-align: center; }
-        .welcome-illustration { width: 150px; margin-top: 1rem; }
     }
 
     @media (max-width: 768px) {
-        .stats-grid { grid-template-columns: 1fr; }
-        .items-grid { grid-template-columns: 1fr; }
+        .stats-grid { 
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .stat-card {
+            padding: 1rem 0.5rem;
+            border-radius: 16px;
+        }
+
+        .stat-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+        }
+
+        .search-section {
+            padding: 0.8rem 1.2rem;
+            border-radius: 16px;
+        }
+
+        .filter-bar-container {
+            padding: 1rem;
+            border-radius: 16px;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 1rem;
+        }
+
+        .filter-group {
+            min-width: 100%;
+            width: 100%;
+        }
+
+        .kategori-tabs {
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+        }
+
+        .kategori-tabs::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .kategori-tabs::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        .kategori-tab {
+            flex-shrink: 0;
+            white-space: nowrap;
+            font-size: 0.85rem;
+            padding: 0.5rem 1rem;
+        }
+
+        .sort-group {
+            width: 100%;
+        }
+
+        .sort-select {
+            width: 100%;
+        }
+
+        .items-grid { 
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .pagination-wrapper {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 1.2rem 1rem;
+            gap: 1rem;
+            border-radius: 16px;
+        }
+
+        .pagination-info {
+            flex-direction: column;
+            gap: 0.6rem;
+            width: 100%;
+        }
+
+        .pagination-controls {
+            justify-content: center;
+            width: 100%;
+            gap: 0.35rem;
+        }
+
+        .page-btn {
+            min-width: 38px;
+            height: 38px;
+            padding: 0 0.6rem;
+            font-size: 0.85rem;
+        }
+
+        .page-btn.btn-nav span.nav-text {
+            display: none; /* Hide 'Sebelumnya' / 'Berikutnya' text on mobile, keep arrows */
+        }
+    }
+
+    @media (max-width: 480px) {
+        .stats-grid { 
+            grid-template-columns: 1fr;
+            gap: 0.6rem;
+        }
+
+        .stat-card {
+            padding: 0.9rem;
+            display: flex;
+            align-items: center;
+            text-align: left;
+            gap: 1rem;
+        }
+
+        .stat-icon {
+            margin-bottom: 0;
+            font-size: 1.8rem;
+        }
+
+        .stat-number {
+            font-size: 1.3rem;
+            line-height: 1.1;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+        }
+
+        .pagination-controls {
+            gap: 0.25rem;
+        }
+
+        .page-btn {
+            min-width: 34px;
+            height: 34px;
+            padding: 0 0.4rem;
+            font-size: 0.8rem;
+            border-radius: 8px;
+        }
+
+        .page-ellipsis {
+            min-width: 20px;
+        }
     }
 </style>
 @endsection
@@ -424,7 +700,7 @@
     <div class="filter-group">
         <span class="kategori-filter-label">Filter Kategori</span>
         <div class="kategori-tabs">
-            <button class="kategori-tab active" data-kategori="semua">
+            <button class="kategori-tab {{ !isset($id_kategori) ? 'active' : '' }}" data-kategori="semua">
                 Semua <span class="count">({{ $barangs->count() }})</span>
             </button>
             @foreach($kategoris as $kategori)
@@ -432,7 +708,7 @@
                     $count = $barangs->where('id_kategori', $kategori->id_kategori)->count();
                 @endphp
                 @if($count > 0)
-                    <button class="kategori-tab" data-kategori="{{ $kategori->id_kategori }}">
+                    <button class="kategori-tab {{ (isset($id_kategori) && $id_kategori == $kategori->id_kategori) ? 'active' : '' }}" data-kategori="{{ $kategori->id_kategori }}">
                         {{ $kategori->nama_kategori }} <span class="count">({{ $count }})</span>
                     </button>
                 @endif
@@ -521,88 +797,254 @@
     </div>
 </div>
 
+<!-- PAGINATION WRAPPER -->
+<div class="pagination-wrapper" id="paginationWrapper" style="display: none;">
+    <div class="pagination-info">
+        <span>Menampilkan <strong id="pageStart">0</strong>-<strong id="pageEnd">0</strong> dari <strong id="pageTotal">0</strong> fasilitas</span>
+        <div class="per-page-selector">
+            <label for="perPageSelect">Tampilkan:</label>
+            <select id="perPageSelect" class="per-page-select">
+                <option value="6" selected>6 per halaman</option>
+                <option value="9">9 per halaman</option>
+                <option value="12">12 per halaman</option>
+                <option value="18">18 per halaman</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="pagination-controls" id="paginationControls">
+        <!-- Injected via JavaScript -->
+    </div>
+</div>
+
 @endsection
 
 @section('scripts')
 <script>
     const kategoriTabs = document.querySelectorAll('.kategori-tab');
-    const itemCards = document.querySelectorAll('.item-card');
+    const itemCards = Array.from(document.querySelectorAll('.item-card'));
     const emptySearchResult = document.getElementById('emptySearchResult');
     const searchInput = document.getElementById('searchInput');
     const sortSelect = document.getElementById('sortSelect');
+    const paginationWrapper = document.getElementById('paginationWrapper');
+    const paginationControls = document.getElementById('paginationControls');
+    const perPageSelect = document.getElementById('perPageSelect');
+    const pageStartEl = document.getElementById('pageStart');
+    const pageEndEl = document.getElementById('pageEnd');
+    const pageTotalEl = document.getElementById('pageTotal');
+    const itemsGrid = document.getElementById('itemsGrid');
     
-    let activeKategori = 'semua';
+    let activeKategori = '{{ $id_kategori ?? "semua" }}';
     let searchQuery = '';
+    let currentPage = 1;
+    let itemsPerPage = parseInt(perPageSelect ? perPageSelect.value : 6) || 6;
 
-    function sortItems() {
-        const grid = document.getElementById('itemsGrid');
-        if (!grid || itemCards.length === 0) return;
+    function getFilteredAndSortedCards() {
+        // 1. Filter
+        const filtered = itemCards.filter(item => {
+            const kategoriId = item.getAttribute('data-kategori-id');
+            const name = (item.getAttribute('data-name') || '').toLowerCase();
+            const kategoriName = (item.getAttribute('data-kategori-name') || '').toLowerCase();
+            
+            const matchKategori = (activeKategori === 'semua') || (kategoriId === activeKategori);
+            const matchSearch = (searchQuery === '') || 
+                                (name.includes(searchQuery)) || 
+                                (kategoriName.includes(searchQuery));
+            
+            return matchKategori && matchSearch;
+        });
 
-        const cardsArray = Array.from(itemCards);
+        // 2. Sort
         const sortValue = sortSelect ? sortSelect.value : 'terbaru';
-
-        cardsArray.sort((a, b) => {
+        filtered.sort((a, b) => {
             if (sortValue === 'terbaru') {
-                return parseInt(b.getAttribute('data-updated')) - parseInt(a.getAttribute('data-updated'));
+                return parseInt(b.getAttribute('data-updated') || 0) - parseInt(a.getAttribute('data-updated') || 0);
             } else if (sortValue === 'populer') {
-                return parseInt(b.getAttribute('data-borrowed')) - parseInt(a.getAttribute('data-borrowed'));
+                return parseInt(b.getAttribute('data-borrowed') || 0) - parseInt(a.getAttribute('data-borrowed') || 0);
             } else if (sortValue === 'nama') {
                 return (a.getAttribute('data-name') || '').localeCompare(b.getAttribute('data-name') || '');
             }
             return 0;
         });
 
-        cardsArray.forEach(card => grid.appendChild(card));
-        if (emptySearchResult) grid.appendChild(emptySearchResult);
+        return filtered;
     }
 
-    function filterItems() {
-        let visibleCount = 0;
+    function generatePageNumbers(current, total) {
+        if (total <= 7) {
+            return Array.from({ length: total }, (_, i) => i + 1);
+        }
+        const pages = [];
+        pages.push(1);
         
-        itemCards.forEach(item => {
-            const kategoriId = item.getAttribute('data-kategori-id');
-            const name = item.getAttribute('data-name') || '';
-            const kategoriName = item.getAttribute('data-kategori-name') || '';
-            
-            const matchKategori = activeKategori === 'semua' || kategoriId === activeKategori;
-            const matchSearch = searchQuery === '' || 
-                                name.includes(searchQuery) || 
-                                kategoriName.includes(searchQuery);
-            
-            if (matchKategori && matchSearch) {
-                item.style.display = 'flex';
-                visibleCount++;
-            } else {
-                item.style.display = 'none';
-            }
+        let start = Math.max(2, current - 1);
+        let end = Math.min(total - 1, current + 1);
+        
+        if (current <= 3) {
+            end = 4;
+        } else if (current >= total - 2) {
+            start = total - 3;
+        }
+        
+        if (start > 2) {
+            pages.push('...');
+        }
+        
+        for (let i = start; i <= end; i++) {
+            pages.push(i);
+        }
+        
+        if (end < total - 1) {
+            pages.push('...');
+        }
+        
+        pages.push(total);
+        return pages;
+    }
+
+    function renderView(shouldScroll = false) {
+        if (!itemsGrid) return;
+
+        const matchingCards = getFilteredAndSortedCards();
+        const totalItems = matchingCards.length;
+
+        // Hide all cards first
+        itemCards.forEach(card => {
+            card.style.display = 'none';
         });
 
-        if (emptySearchResult) {
-            emptySearchResult.style.display = (visibleCount === 0 && itemCards.length > 0) ? 'block' : 'none';
+        if (totalItems === 0) {
+            if (emptySearchResult) emptySearchResult.style.display = 'block';
+            if (paginationWrapper) paginationWrapper.style.display = 'none';
+            return;
+        }
+
+        if (emptySearchResult) emptySearchResult.style.display = 'none';
+        if (paginationWrapper) paginationWrapper.style.display = 'flex';
+
+        const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
+        if (currentPage > totalPages) currentPage = totalPages;
+        if (currentPage < 1) currentPage = 1;
+
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+
+        // Display cards on current page & append in correct sorted order
+        for (let i = startIndex; i < endIndex; i++) {
+            const card = matchingCards[i];
+            card.style.display = 'flex';
+            itemsGrid.appendChild(card);
+        }
+        if (emptySearchResult) itemsGrid.appendChild(emptySearchResult);
+
+        // Update info text
+        if (pageStartEl) pageStartEl.textContent = startIndex + 1;
+        if (pageEndEl) pageEndEl.textContent = endIndex;
+        if (pageTotalEl) pageTotalEl.textContent = totalItems;
+
+        // Render pagination controls
+        renderPaginationButtons(totalPages);
+
+        if (shouldScroll) {
+            const target = document.querySelector('.search-section') || itemsGrid;
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     }
 
+    function renderPaginationButtons(totalPages) {
+        if (!paginationControls) return;
+        paginationControls.innerHTML = '';
+
+        // Previous Button
+        const prevBtn = document.createElement('button');
+        prevBtn.type = 'button';
+        prevBtn.className = 'page-btn btn-nav';
+        prevBtn.innerHTML = '&larr; <span class="nav-text">Sebelumnya</span>';
+        prevBtn.title = 'Halaman Sebelumnya';
+        prevBtn.disabled = (currentPage === 1);
+        prevBtn.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderView(true);
+            }
+        });
+        paginationControls.appendChild(prevBtn);
+
+        // Numeric Buttons
+        const pageNumbers = generatePageNumbers(currentPage, totalPages);
+        pageNumbers.forEach(page => {
+            if (page === '...') {
+                const ellipsis = document.createElement('span');
+                ellipsis.className = 'page-ellipsis';
+                ellipsis.textContent = '...';
+                paginationControls.appendChild(ellipsis);
+            } else {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'page-btn' + (page === currentPage ? ' active' : '');
+                btn.textContent = page;
+                btn.title = 'Halaman ' + page;
+                btn.addEventListener('click', () => {
+                    if (currentPage !== page) {
+                        currentPage = page;
+                        renderView(true);
+                    }
+                });
+                paginationControls.appendChild(btn);
+            }
+        });
+
+        // Next Button
+        const nextBtn = document.createElement('button');
+        nextBtn.type = 'button';
+        nextBtn.className = 'page-btn btn-nav';
+        nextBtn.innerHTML = '<span class="nav-text">Berikutnya</span> &rarr;';
+        nextBtn.title = 'Halaman Berikutnya';
+        nextBtn.disabled = (currentPage === totalPages);
+        nextBtn.addEventListener('click', () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderView(true);
+            }
+        });
+        paginationControls.appendChild(nextBtn);
+    }
+
+    // Event Listeners
     kategoriTabs.forEach(tab => {
         tab.addEventListener('click', function() {
             kategoriTabs.forEach(t => t.classList.remove('active'));
             this.classList.add('active');
             activeKategori = this.getAttribute('data-kategori');
-            filterItems();
+            currentPage = 1;
+            renderView(false);
         });
     });
 
     if (searchInput) {
         searchInput.addEventListener('input', function(e) {
             searchQuery = e.target.value.toLowerCase().trim();
-            filterItems();
+            currentPage = 1;
+            renderView(false);
         });
     }
 
     if (sortSelect) {
         sortSelect.addEventListener('change', function() {
-            sortItems();
-            filterItems();
+            currentPage = 1;
+            renderView(false);
         });
     }
+
+    if (perPageSelect) {
+        perPageSelect.addEventListener('change', function(e) {
+            itemsPerPage = parseInt(e.target.value) || 6;
+            currentPage = 1;
+            renderView(false);
+        });
+    }
+
+    // Initial render
+    renderView(false);
 </script>
 @endsection
