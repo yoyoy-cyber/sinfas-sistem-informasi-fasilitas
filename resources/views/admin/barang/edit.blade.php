@@ -145,7 +145,10 @@
         </div>
 
         <div class="form-group">
-            <label>Kategori *</label>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <label style="margin-bottom: 0;">Kategori *</label>
+                <a href="{{ route('admin.kategori.index') }}" target="_blank" style="font-size: 0.8rem; color: #2563eb; text-decoration: none; font-weight: 600;">+ Kelola Kategori</a>
+            </div>
             <select name="id_kategori" required>
                 <option value="">-- Pilih Kategori --</option>
                 @foreach($kategoris as $kategori)

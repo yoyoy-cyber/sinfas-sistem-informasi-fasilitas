@@ -316,6 +316,136 @@
         color: #94a3b8;
     }
 
+    /* ===== SEARCH BAR ===== */
+    .search-section {
+        background: #f8fafc;
+        border-radius: 16px;
+        padding: 0.85rem 1.2rem;
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        margin-bottom: 1.2rem;
+        border: 1.5px solid #e2e8f0;
+        transition: border-color 0.2s;
+    }
+
+    .search-section:focus-within {
+        border-color: #2563eb;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .search-section svg {
+        width: 20px;
+        height: 20px;
+        fill: #94a3b8;
+        flex-shrink: 0;
+    }
+
+    .search-section input {
+        flex: 1;
+        border: none;
+        outline: none;
+        font-size: 0.92rem;
+        color: #334155;
+        background: transparent;
+    }
+
+    .search-section input::placeholder {
+        color: #94a3b8;
+    }
+
+    /* ===== KATEGORI FILTER & SORT BAR ===== */
+    .filter-bar-container {
+        background: #f8fafc;
+        border-radius: 16px;
+        padding: 1.2rem 1.4rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        border: 1.5px solid #e2e8f0;
+    }
+
+    .filter-group {
+        flex: 1;
+        min-width: 260px;
+    }
+
+    .sort-group {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .kategori-filter-label {
+        font-size: 0.8rem;
+        color: #64748b;
+        font-weight: 700;
+        margin-bottom: 0.6rem;
+        display: block;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .kategori-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .kategori-tab {
+        padding: 0.55rem 1.1rem;
+        border-radius: 25px;
+        border: 1.5px solid #cbd5e1;
+        background: white;
+        color: #475569;
+        font-weight: 600;
+        font-size: 0.88rem;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .kategori-tab:hover {
+        border-color: #1e40af;
+        color: #1e40af;
+        background: #eff6ff;
+    }
+
+    .kategori-tab.active {
+        background: #1e40af;
+        color: white;
+        border-color: #1e40af;
+        box-shadow: 0 2px 8px rgba(30, 64, 175, 0.3);
+    }
+
+    .kategori-tab .count {
+        margin-left: 0.3rem;
+        font-size: 0.8rem;
+        opacity: 0.85;
+    }
+
+    .sort-select {
+        padding: 0.65rem 1.2rem;
+        border-radius: 25px;
+        border: 2px solid #2563eb;
+        background: white;
+        color: #1e293b;
+        font-weight: 700;
+        font-size: 0.9rem;
+        cursor: pointer;
+        outline: none;
+        transition: all 0.2s;
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.15);
+    }
+
+    .sort-select:hover, .sort-select:focus {
+        border-color: #1d4ed8;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    }
+
     /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
         .table-container { display: none; }
@@ -324,6 +454,38 @@
         .content-card { padding: 1.2rem; }
 
         .page-title-section h2 { font-size: 1.4rem; }
+
+        .filter-bar-container {
+            padding: 1rem;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 1rem;
+        }
+
+        .filter-group {
+            min-width: 100%;
+            width: 100%;
+        }
+
+        .kategori-tabs {
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .kategori-tab {
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+
+        .sort-group {
+            width: 100%;
+        }
+
+        .sort-select {
+            width: 100%;
+        }
     }
 </style>
 @endsection
@@ -335,7 +497,10 @@
         <span class="icon">📦</span>
         <h2>Data Barang</h2>
     </div>
-    <a href="{{ route('admin.dashboard') }}" class="btn-back">← Dashboard</a>
+    <div style="display: flex; gap: 0.6rem; flex-wrap: wrap;">
+        <a href="{{ route('admin.kategori.index') }}" class="btn-back" style="color: #0284c7;">📁 Kategori Barang</a>
+        <a href="{{ route('admin.dashboard') }}" class="btn-back">← Dashboard</a>
+    </div>
 </div>
 
 @if(session('success'))
@@ -348,11 +513,58 @@
 
 <div class="content-card">
     <div class="card-header">
-        <h3>Daftar Semua Barang</h3>
-        <a href="{{ route('admin.barang.create') }}" class="btn-tambah">+ Tambah Barang</a>
+        <div>
+            <h3>Daftar Semua Barang</h3>
+            <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.2rem;">Inventaris fasilitas dan sarana prasarana sekolah</p>
+        </div>
+        <div style="display: flex; gap: 0.6rem; flex-wrap: wrap;">
+            <a href="{{ route('admin.kategori.index') }}" class="btn-tambah" style="background: #0284c7;">📁 Kelola Kategori</a>
+            <a href="{{ route('admin.barang.create') }}" class="btn-tambah">+ Tambah Barang</a>
+        </div>
     </div>
 
     @if($barangs->count() > 0)
+
+    <!-- SEARCH BAR -->
+    <div class="search-section">
+        <svg viewBox="0 0 24 24">
+            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+        </svg>
+        <input type="text" placeholder="Cari fasilitas berdasarkan nama, kode, kategori, atau merk..." id="searchInput">
+    </div>
+
+    <!-- KATEGORI FILTER & SORT BAR -->
+    <div class="filter-bar-container">
+        <div class="filter-group">
+            <span class="kategori-filter-label">Filter Kategori</span>
+            <div class="kategori-tabs">
+                <button class="kategori-tab active" data-kategori="semua">
+                    Semua <span class="count">({{ $barangs->count() }})</span>
+                </button>
+                @if(isset($kategoris))
+                    @foreach($kategoris as $kategori)
+                        @php
+                            $count = $barangs->where('id_kategori', $kategori->id_kategori)->count();
+                        @endphp
+                        @if($count > 0)
+                            <button class="kategori-tab" data-kategori="{{ $kategori->id_kategori }}">
+                                {{ $kategori->nama_kategori }} <span class="count">({{ $count }})</span>
+                            </button>
+                        @endif
+                    @endforeach
+                @endif
+            </div>
+        </div>
+        
+        <div class="sort-group">
+            <span class="kategori-filter-label">Urutkan Berdasarkan</span>
+            <select id="sortSelect" class="sort-select">
+                <option value="terbaru">✨ Terbaru Ditambahkan / Diubah</option>
+                <option value="populer">🔥 Paling Sering Dipinjam</option>
+                <option value="nama">🔤 Nama Barang (A-Z)</option>
+            </select>
+        </div>
+    </div>
 
     {{-- ===== DESKTOP TABLE ===== --}}
     <div class="table-container">
@@ -370,12 +582,19 @@
                     <th>Aksi</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="barangTableBody">
                 @foreach($barangs as $barang)
                 @php
                     $isHighlighted = (session('highlight_id') && session('highlight_id') == $barang->kode_barang) || ($loop->first && session('success'));
                 @endphp
-                <tr class="{{ $isHighlighted ? 'row-highlight' : '' }}">
+                <tr class="barang-row {{ $isHighlighted ? 'row-highlight' : '' }}"
+                    data-name="{{ strtolower($barang->nama_barang) }}"
+                    data-kode="{{ strtolower($barang->kode_barang) }}"
+                    data-kategori-id="{{ $barang->id_kategori }}"
+                    data-kategori-name="{{ strtolower($barang->kategori->nama_kategori ?? '') }}"
+                    data-merk="{{ strtolower($barang->merk_model ?? '') }}"
+                    data-updated="{{ $barang->updated_at ? $barang->updated_at->timestamp : 0 }}"
+                    data-borrowed="{{ $barang->peminjaman_requests_count ?? 0 }}">
                     <td>
                         <strong>{{ $barang->kode_barang }}</strong>
                         @if($isHighlighted)
@@ -416,12 +635,19 @@
     </div>
 
     {{-- ===== MOBILE CARDS ===== --}}
-    <div class="mobile-cards">
+    <div class="mobile-cards" id="barangMobileList">
         @foreach($barangs as $barang)
         @php
             $isHighlighted = (session('highlight_id') && session('highlight_id') == $barang->kode_barang) || ($loop->first && session('success'));
         @endphp
-        <div class="barang-card {{ $isHighlighted ? 'row-highlight' : '' }}">
+        <div class="barang-card {{ $isHighlighted ? 'row-highlight' : '' }}"
+             data-name="{{ strtolower($barang->nama_barang) }}"
+             data-kode="{{ strtolower($barang->kode_barang) }}"
+             data-kategori-id="{{ $barang->id_kategori }}"
+             data-kategori-name="{{ strtolower($barang->kategori->nama_kategori ?? '') }}"
+             data-merk="{{ strtolower($barang->merk_model ?? '') }}"
+             data-updated="{{ $barang->updated_at ? $barang->updated_at->timestamp : 0 }}"
+             data-borrowed="{{ $barang->peminjaman_requests_count ?? 0 }}">
             {{-- Top: nama + status --}}
             <div class="barang-card-top">
                 <div>
@@ -488,6 +714,11 @@
         @endforeach
     </div>
 
+    <div id="emptySearchResult" style="display: none; text-align: center; padding: 3rem 1rem; color: #94a3b8;">
+        <h3 style="color: #1e293b; margin-bottom: 0.5rem; font-size: 1.15rem;">Tidak Ada Barang Ditemukan</h3>
+        <p style="font-size: 0.9rem;">Coba gunakan kata kunci pencarian atau filter kategori yang berbeda.</p>
+    </div>
+
     @else
     <div class="empty-state">
         <h3>Belum Ada Data Barang</h3>
@@ -496,4 +727,120 @@
     @endif
 </div>
 
+@endsection
+
+@section('scripts')
+<script>
+    const kategoriTabs = document.querySelectorAll('.kategori-tab');
+    const tableRows = Array.from(document.querySelectorAll('.barang-row'));
+    const mobileCards = Array.from(document.querySelectorAll('.barang-card'));
+    const searchInput = document.getElementById('searchInput');
+    const sortSelect = document.getElementById('sortSelect');
+    const tableBody = document.getElementById('barangTableBody');
+    const mobileList = document.getElementById('barangMobileList');
+    const emptySearchResult = document.getElementById('emptySearchResult');
+    const tableContainer = document.querySelector('.table-container');
+
+    let activeKategori = 'semua';
+    let searchQuery = '';
+
+    function filterAndSort() {
+        const sortValue = sortSelect ? sortSelect.value : 'terbaru';
+
+        // Sort function
+        const sortFn = (a, b) => {
+            if (sortValue === 'terbaru') {
+                return parseInt(b.getAttribute('data-updated') || 0) - parseInt(a.getAttribute('data-updated') || 0);
+            } else if (sortValue === 'populer') {
+                return parseInt(b.getAttribute('data-borrowed') || 0) - parseInt(a.getAttribute('data-borrowed') || 0);
+            } else if (sortValue === 'nama') {
+                return (a.getAttribute('data-name') || '').localeCompare(b.getAttribute('data-name') || '');
+            }
+            return 0;
+        };
+
+        // Sort arrays
+        tableRows.sort(sortFn);
+        mobileCards.sort(sortFn);
+
+        // Re-append in sorted order & filter
+        let visibleCount = 0;
+
+        tableRows.forEach(row => {
+            const name = row.getAttribute('data-name') || '';
+            const kode = row.getAttribute('data-kode') || '';
+            const kategoriId = row.getAttribute('data-kategori-id') || '';
+            const kategoriName = row.getAttribute('data-kategori-name') || '';
+            const merk = row.getAttribute('data-merk') || '';
+
+            const matchKategori = (activeKategori === 'semua') || (kategoriId === activeKategori);
+            const matchSearch = (searchQuery === '') ||
+                                name.includes(searchQuery) ||
+                                kode.includes(searchQuery) ||
+                                kategoriName.includes(searchQuery) ||
+                                merk.includes(searchQuery);
+
+            if (matchKategori && matchSearch) {
+                row.style.display = '';
+                visibleCount++;
+            } else {
+                row.style.display = 'none';
+            }
+
+            if (tableBody) tableBody.appendChild(row);
+        });
+
+        mobileCards.forEach(card => {
+            const name = card.getAttribute('data-name') || '';
+            const kode = card.getAttribute('data-kode') || '';
+            const kategoriId = card.getAttribute('data-kategori-id') || '';
+            const kategoriName = card.getAttribute('data-kategori-name') || '';
+            const merk = card.getAttribute('data-merk') || '';
+
+            const matchKategori = (activeKategori === 'semua') || (kategoriId === activeKategori);
+            const matchSearch = (searchQuery === '') ||
+                                name.includes(searchQuery) ||
+                                kode.includes(searchQuery) ||
+                                kategoriName.includes(searchQuery) ||
+                                merk.includes(searchQuery);
+
+            if (matchKategori && matchSearch) {
+                card.style.display = '';
+            } else {
+                card.style.display = 'none';
+            }
+
+            if (mobileList) mobileList.appendChild(card);
+        });
+
+        if (emptySearchResult) {
+            emptySearchResult.style.display = (visibleCount === 0 && tableRows.length > 0) ? 'block' : 'none';
+        }
+        if (tableContainer) {
+            tableContainer.style.display = (visibleCount === 0 && tableRows.length > 0) ? 'none' : '';
+        }
+    }
+
+    kategoriTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            kategoriTabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            activeKategori = this.getAttribute('data-kategori');
+            filterAndSort();
+        });
+    });
+
+    if (searchInput) {
+        searchInput.addEventListener('input', function(e) {
+            searchQuery = e.target.value.toLowerCase().trim();
+            filterAndSort();
+        });
+    }
+
+    if (sortSelect) {
+        sortSelect.addEventListener('change', function() {
+            filterAndSort();
+        });
+    }
+</script>
 @endsection

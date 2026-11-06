@@ -37,14 +37,14 @@
         @csrf
 
         <div>
-            <label style="display: block; color: #374151; font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem;">NIS/NIP</label>
+            <label style="display: block; color: #374151; font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem;">Username/NIS/NIP</label>
             <input type="text" name="username" value="{{ old('username') }}" required
-                placeholder="Masukkan NIS/NIP"
+                placeholder="Masukkan Username/NIS/NIP"
                 style="width: 100%; padding: 0.75rem 0.5rem; border: none; border-bottom: 2px solid #cbd5e1; font-size: 0.9rem; background: transparent; outline: none; transition: border-color 0.2s;">
         </div>
 
         <div>
-            <label style="display: block; color: #374151; font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem;">Kata Sandi</label>
+            <label style="display: block; color: #374151; font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem;">Password</label>
             <input type="password" name="password" required
                 style="width: 100%; padding: 0.75rem 0.5rem; border: none; border-bottom: 2px solid #cbd5e1; font-size: 0.9rem; background: transparent; outline: none; transition: border-color 0.2s;">
         </div>

@@ -24,8 +24,12 @@ class BarangController extends Controller
     // Tampilkan daftar barang
     public function index()
     {
-        $barangs = Barang::with('kategori')->orderBy('updated_at', 'desc')->get();
-        return view('admin.barang.index', compact('barangs'));
+        $barangs = Barang::with('kategori')
+            ->withCount('peminjamanRequests')
+            ->orderBy('updated_at', 'desc')
+            ->get();
+        $kategoris = Kategori::withCount('barangs')->orderBy('nama_kategori', 'asc')->get();
+        return view('admin.barang.index', compact('barangs', 'kategoris'));
     }
 
     // Tampilkan detail barang

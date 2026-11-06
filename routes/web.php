@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Http\Controllers\User\DashboardController as UserDashboardController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\BarangController;
+use App\Http\Controllers\Admin\KategoriController;
 use App\Http\Controllers\SystemAdminController;
 
 /*
@@ -106,6 +107,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/barang/{kode_barang}/edit', [BarangController::class, 'edit'])->name('barang.edit');
     Route::put('/barang/{kode_barang}', [BarangController::class, 'update'])->name('barang.update');
     Route::delete('/barang/{kode_barang}', [BarangController::class, 'destroy'])->name('barang.destroy');
+    
+    // CRUD KATEGORI
+    Route::get('/kategori', [KategoriController::class, 'index'])->name('kategori.index');
+    Route::post('/kategori', [KategoriController::class, 'store'])->name('kategori.store');
+    Route::put('/kategori/{id_kategori}', [KategoriController::class, 'update'])->name('kategori.update');
+    Route::delete('/kategori/{id_kategori}', [KategoriController::class, 'destroy'])->name('kategori.destroy');
     
     // APPROVE/REJECT PEMINJAMAN
     Route::post('/peminjaman/{id}/approve', [App\Http\Controllers\Admin\PeminjamanController::class, 'approve'])->name('peminjaman.approve');
