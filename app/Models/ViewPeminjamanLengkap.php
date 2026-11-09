@@ -15,3 +15,4 @@ class ViewPeminjamanLengkap extends Model
     // View database bersifat read-only
     protected $guarded = ['*'];
 }
+

@@ -682,12 +682,6 @@
                         Profil Saya
                     </a>
                 </li>
-                <li>
-                    <a href="{{ route('admin.database-features') }}" class="{{ request()->routeIs('admin.database-features*') ? 'active' : '' }}">
-                        <svg viewBox="0 0 24 24"><path d="M12 3C7.58 3 4 4.79 4 7v10c0 2.21 3.58 4 8 4s8-1.79 8-4V7c0-2.21-3.58-4-8-4zm0 2c3.87 0 6 1.5 6 2s-2.13 2-6 2-6-1.5-6-2 2.13-2 6-2zm6 12c0 .5-2.13 2-6 2s-6-1.5-6-2v-2.23c1.61.78 3.73 1.23 6 1.23s4.39-.45 6-1.23V17zm0-3.5c0 .5-2.13 2-6 2s-6-1.5-6-2v-2.23c1.61.78 3.73 1.23 6 1.23s4.39-.45 6-1.23V13.5z"/></svg>
-                        Fitur Database (SP/Trigger/View)
-                    </a>
-                </li>
             </ul>
 
             <div class="sidebar-footer">
