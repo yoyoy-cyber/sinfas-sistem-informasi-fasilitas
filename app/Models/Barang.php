@@ -58,4 +58,20 @@ class Barang extends Model
     {
         return $this->hasMany(PeminjamanRequest::class, 'kode_barang', 'kode_barang');
     }
+
+    // Hanya peminjaman yang valid / disetujui / aktif / selesai
+    public function peminjamanDisetujui()
+    {
+        return $this->hasMany(PeminjamanRequest::class, 'kode_barang', 'kode_barang')
+            ->whereIn('status', ['disetujui', 'dipinjam', 'sedang_dipinjam', 'selesai', 'dikembalikan']);
+    }
+
+    // Accessor total kali dipinjam yang valid (tidak menghitung pending, ditolak, atau dibatalkan)
+    public function getTotalDipinjamAttribute(): int
+    {
+        if (isset($this->attributes['peminjaman_requests_count'])) {
+            return (int) $this->attributes['peminjaman_requests_count'];
+        }
+        return (int) $this->peminjamanDisetujui()->count();
+    }
 }

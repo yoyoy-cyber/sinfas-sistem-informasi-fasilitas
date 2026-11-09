@@ -731,14 +731,15 @@
     @forelse($barangs as $barang)
         @php
             $isNew = $loop->first || ($barang->updated_at && $barang->updated_at->diffInDays(now()) <= 7);
-            $isPopular = ($barang->peminjaman_requests_count ?? 0) > 0;
+            $borrowCount = isset($barang->peminjaman_requests_count) ? (int)$barang->peminjaman_requests_count : (int)$barang->total_dipinjam;
+            $isPopular = $borrowCount > 0;
         @endphp
         <div class="item-card" 
              data-name="{{ strtolower($barang->nama_barang) }}" 
              data-kategori-id="{{ $barang->id_kategori }}"
              data-kategori-name="{{ strtolower($barang->kategori->nama_kategori ?? '') }}"
              data-updated="{{ $barang->updated_at ? $barang->updated_at->timestamp : 0 }}"
-             data-borrowed="{{ $barang->peminjaman_requests_count ?? 0 }}">
+             data-borrowed="{{ $borrowCount }}">
             
             <div class="item-header">
                 <div>
@@ -749,7 +750,7 @@
                             <span class="badge-tag badge-baru">✨ Terbaru</span>
                         @endif
                         @if($isPopular)
-                            <span class="badge-tag badge-populer">🔥 {{ $barang->peminjaman_requests_count }}x Dipinjam</span>
+                            <span class="badge-tag badge-populer">🔥 {{ $borrowCount }}x Dipinjam</span>
                         @endif
                     </div>
                 </div>

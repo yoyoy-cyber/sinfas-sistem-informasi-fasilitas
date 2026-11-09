@@ -389,7 +389,7 @@
 </div>
 
 <!-- ===== MODAL POPUP PERHATIAN MENUNGGU PERSETUJUAN ===== -->
-<div class="modal-overlay {{ (session('show_peminjaman_modal') || session('success')) ? 'active' : '' }}" id="noticePeminjamanModal">
+<div class="modal-overlay {{ session('show_peminjaman_modal') ? 'active' : '' }}" id="noticePeminjamanModal">
     <div class="modal-box-notice">
         <div class="modal-header-blue">
             <h3>PERHATIAN!!</h3>

@@ -179,20 +179,46 @@ Route::get('/about', function () {
 | STORAGE LINK & FILE SERVING FALLBACK (Untuk Shared Hosting / cPanel)
 |--------------------------------------------------------------------------
 */
-// Jalankan migrasi database di hosting (DirectAdmin / cPanel tanpa akses terminal SSH)
+// Jalankan migrasi database di hosting & bersihkan cache view/route (DirectAdmin / cPanel tanpa akses SSH)
 Route::get('/migrate', function () {
     try {
         \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
         $output = \Illuminate\Support\Facades\Artisan::output();
+
+        // Bersihkan cache view, route, config agar kode terbaru langsung aktif
+        \Illuminate\Support\Facades\Artisan::call('view:clear');
+        \Illuminate\Support\Facades\Artisan::call('cache:clear');
+        \Illuminate\Support\Facades\Artisan::call('config:clear');
+        if (function_exists('opcache_reset')) {
+            @opcache_reset();
+        }
+
         return '<pre style="background:#0f172a; color:#38bdf8; padding:2rem; border-radius:12px; font-family:monospace; line-height:1.6;">'
-            . '✅ <strong>Migration Berhasil Dijalankan di Hosting!</strong><br><br>'
+            . '✅ <strong>Migration & Clear Cache Berhasil Dijalankan di Hosting!</strong><br><br>'
             . htmlspecialchars($output ?: 'Database sudah up to date.')
-            . '<br><br><a href="' . url('/') . '" style="color:#4ade80; text-decoration:none; font-weight:bold;">← Kembali ke Beranda</a></pre>';
+            . '<br><br><a href="' . url('/user/dashboard') . '" style="color:#4ade80; text-decoration:none; font-weight:bold;">← Kembali ke Dashboard</a></pre>';
     } catch (\Throwable $e) {
         return '<pre style="background:#0f172a; color:#ef4444; padding:2rem; border-radius:12px; font-family:monospace; line-height:1.6;">'
             . '❌ <strong>Gagal menjalankan migrasi:</strong><br><br>'
             . htmlspecialchars($e->getMessage())
             . '</pre>';
+    }
+});
+
+Route::get('/clear-cache', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('view:clear');
+        \Illuminate\Support\Facades\Artisan::call('cache:clear');
+        \Illuminate\Support\Facades\Artisan::call('config:clear');
+        \Illuminate\Support\Facades\Artisan::call('route:clear');
+        if (function_exists('opcache_reset')) {
+            @opcache_reset();
+        }
+        return '<pre style="background:#0f172a; color:#38bdf8; padding:2rem; border-radius:12px; font-family:monospace;">'
+            . '✅ <strong>Semua cache (view, config, route, opcache) berhasil dibersihkan!</strong><br><br>'
+            . '<a href="' . url('/user/dashboard') . '" style="color:#4ade80; font-weight:bold;">← Kembali ke Dashboard</a></pre>';
+    } catch (\Throwable $e) {
+        return 'Gagal bersihkan cache: ' . $e->getMessage();
     }
 });
 
