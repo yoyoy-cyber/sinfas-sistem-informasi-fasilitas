@@ -181,6 +181,7 @@
     .status-disetujui { background: #16a34a; }
     .status-ditolak { background: #dc2626; }
     .status-dikembalikan { background: #6b7280; }
+    .status-dibatalkan { background: #64748b; }
 
     .btn-alasan {
         background: #3b82f6;
@@ -374,6 +375,9 @@
     <a href="{{ route('admin.peminjaman.index', ['status' => 'ditolak']) }}" class="tab-btn {{ $status === 'ditolak' ? 'active' : '' }}">
         Ditolak <span class="badge-count">{{ $counts['ditolak'] ?? 0 }}</span>
     </a>
+    <a href="{{ route('admin.peminjaman.index', ['status' => 'dibatalkan']) }}" class="tab-btn {{ $status === 'dibatalkan' ? 'active' : '' }}">
+        Dibatalkan <span class="badge-count">{{ $counts['dibatalkan'] ?? 0 }}</span>
+    </a>
 </div>
 
 <div class="content-card">
@@ -388,6 +392,8 @@
                 <span style="color:#dc2626;">(Terlambat Mengembalikan)</span>
             @elseif($status === 'ditolak')
                 (Ditolak)
+            @elseif($status === 'dibatalkan')
+                (Dibatalkan oleh Peminjam)
             @endif
         </h3>
     </div>
@@ -446,7 +452,7 @@
                             </span>
                         @else
                             <span class="status-badge status-{{ $p->status === 'disetujui' ? 'disetujui' : $p->status }}">
-                                {{ $p->status === 'pending' ? 'Menunggu' : (in_array($p->status, ['disetujui', 'dipinjam', 'sedang_dipinjam']) ? 'Sedang Dipinjam' : ($p->status === 'ditolak' ? 'Ditolak' : 'Dikembalikan')) }}
+                                {{ $p->status === 'pending' ? 'Menunggu' : (in_array($p->status, ['disetujui', 'dipinjam', 'sedang_dipinjam']) ? 'Sedang Dipinjam' : ($p->status === 'ditolak' ? 'Ditolak' : ($p->status === 'dibatalkan' ? 'Dibatalkan' : 'Dikembalikan'))) }}
                             </span>
                         @endif
                     </td>
@@ -462,6 +468,11 @@
                                     ✕ Tolak
                                 </button>
                             </div>
+                        @elseif($p->status === 'dibatalkan')
+                            <span style="color: #64748b; font-size: 0.82rem; font-weight: 600;">Dibatalkan Peminjam</span>
+                            @if($p->alasan_pembatalan)
+                                <button class="btn-alasan" style="background: #64748b; margin-top: 0.3rem; display: block;" onclick="showAlasan({{ $p->id }}, '{{ addslashes($p->alasan_pembatalan) }}')">Alasan Batal</button>
+                            @endif
                         @else
                             <span style="color: #94a3b8; font-size: 0.85rem;">-</span>
                         @endif
@@ -492,7 +503,7 @@
                     </span>
                 @else
                     <span class="status-badge status-{{ $p->status === 'disetujui' ? 'disetujui' : $p->status }}" style="font-size:0.72rem; padding:0.3rem 0.7rem; white-space:nowrap;">
-                        {{ $p->status === 'pending' ? 'Menunggu' : (in_array($p->status, ['disetujui', 'dipinjam', 'sedang_dipinjam']) ? 'Sedang Dipinjam' : ($p->status === 'ditolak' ? 'Ditolak' : 'Dikembalikan')) }}
+                        {{ $p->status === 'pending' ? 'Menunggu' : (in_array($p->status, ['disetujui', 'dipinjam', 'sedang_dipinjam']) ? 'Sedang Dipinjam' : ($p->status === 'ditolak' ? 'Ditolak' : ($p->status === 'dibatalkan' ? 'Dibatalkan' : 'Dikembalikan'))) }}
                     </span>
                 @endif
             </div>
@@ -528,6 +539,12 @@
                     <button class="card-btn" style="background:#eff6ff; color:#1e40af;"
                         onclick="showAlasan({{ $p->id }}, '{{ addslashes($p->alasan_keperluan) }}')">
                         📝 Alasan
+                    </button>
+                @endif
+                @if($p->status === 'dibatalkan' && $p->alasan_pembatalan)
+                    <button class="card-btn" style="background:#f1f5f9; color:#475569;"
+                        onclick="showAlasan({{ $p->id }}, '{{ addslashes($p->alasan_pembatalan) }}')">
+                        ℹ️ Alasan Batal
                     </button>
                 @endif
                 @if($p->status === 'pending')

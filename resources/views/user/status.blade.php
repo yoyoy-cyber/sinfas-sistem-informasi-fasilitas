@@ -50,6 +50,7 @@
     .status-disetujui { background: #dcfce7; color: #166534; }
     .status-ditolak { background: #fee2e2; color: #991b1b; }
     .status-dikembalikan { background: #e0e7ff; color: #3730a3; }
+    .status-dibatalkan { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
 
     .pengajuan-item {
         display: flex;
@@ -371,7 +372,7 @@
                 </div>
                 <div class="pengajuan-status">
                     <span class="status-badge status-{{ $p->status }}">
-                        {{ $p->status === 'pending' ? 'Menunggu' : ($p->status === 'disetujui' ? 'Disetujui' : ($p->status === 'ditolak' ? 'Ditolak' : 'Dikembalikan')) }}
+                        {{ $p->status === 'pending' ? 'Menunggu' : ($p->status === 'disetujui' ? 'Disetujui' : ($p->status === 'ditolak' ? 'Ditolak' : ($p->status === 'dibatalkan' ? 'Dibatalkan' : 'Dikembalikan'))) }}
                     </span>
                 </div>
             </a>

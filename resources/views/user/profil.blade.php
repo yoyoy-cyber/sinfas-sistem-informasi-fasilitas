@@ -233,6 +233,17 @@
     <div class="alert-box alert-success">✅ {{ session('success') }}</div>
 @endif
 
+@if($errors->any())
+    <div class="alert-box" style="background: white !important; color: #991b1b !important; border-left: 4px solid #dc2626 !important;">
+        <div style="font-weight: 700; margin-bottom: 0.3rem;">⚠️ Terjadi kesalahan:</div>
+        <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.9rem;">
+            @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
 <!-- FORM EDIT PROFIL -->
 <div class="profil-card">
     <h3>✏️ Edit Profil</h3>

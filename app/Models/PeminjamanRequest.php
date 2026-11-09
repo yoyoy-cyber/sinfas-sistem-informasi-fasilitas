@@ -33,6 +33,7 @@ class PeminjamanRequest extends Model
         'lokasi_penggunaan',
         'keterangan_penggunaan',
         'alasan_penolakan',
+        'alasan_pembatalan',
         'catatan_admin',
         'status',
     ];

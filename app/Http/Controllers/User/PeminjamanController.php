@@ -79,6 +79,27 @@ class PeminjamanController extends Controller
         return view('user.status-detail', compact('pengajuan'));
     }
 
+    // Batalkan pengajuan peminjaman oleh user (hanya jika status masih 'pending')
+    public function cancel(Request $request, $id)
+    {
+        $pengajuan = PeminjamanRequest::where('username', Auth::user()->username)
+            ->findOrFail($id);
+
+        if ($pengajuan->status !== 'pending') {
+            return back()->with('error', 'Pengajuan ini tidak dapat dibatalkan karena sudah diproses atau disetujui.');
+        }
+
+        $alasan = $request->input('alasan_pembatalan', 'Dibatalkan oleh peminjam');
+
+        $pengajuan->update([
+            'status' => 'dibatalkan',
+            'alasan_pembatalan' => $alasan,
+        ]);
+
+        return redirect()->route('user.status')
+            ->with('success', 'Pengajuan peminjaman untuk "' . ($pengajuan->nama_barang ?? 'barang') . '" berhasil dibatalkan.');
+    }
+
     // Riwayat peminjaman (redirect ke status)
     public function history()
     {

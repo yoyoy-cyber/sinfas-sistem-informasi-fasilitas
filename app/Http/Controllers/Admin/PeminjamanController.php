@@ -36,6 +36,8 @@ class PeminjamanController extends Controller
                   ->where('tanggal_kembali', '<', $today);
         } elseif ($status === 'ditolak') {
             $query->where('status', 'ditolak');
+        } elseif ($status === 'dibatalkan') {
+            $query->where('status', 'dibatalkan');
         } else {
             $query->where('status', $status);
         }
@@ -48,6 +50,7 @@ class PeminjamanController extends Controller
             'sedang_dipinjam' => PeminjamanRequest::whereIn('status', ['disetujui', 'dipinjam', 'sedang_dipinjam'])->count(),
             'terlambat' => PeminjamanRequest::whereIn('status', ['disetujui', 'dipinjam', 'sedang_dipinjam'])->where('tanggal_kembali', '<', $today)->count(),
             'ditolak' => PeminjamanRequest::where('status', 'ditolak')->count(),
+            'dibatalkan' => PeminjamanRequest::where('status', 'dibatalkan')->count(),
         ];
 
         return view('admin.peminjaman.index', compact('peminjaman', 'status', 'counts'));

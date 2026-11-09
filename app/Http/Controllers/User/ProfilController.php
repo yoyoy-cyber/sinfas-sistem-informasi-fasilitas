@@ -27,6 +27,11 @@ class ProfilController extends Controller
     {
         $user = Auth::user()->load(['siswa', 'pegawai']);
 
+        // Dukung input nama atau nama_lengkap
+        if (!$request->has('nama') && $request->has('nama_lengkap')) {
+            $request->merge(['nama' => $request->input('nama_lengkap')]);
+        }
+
         $validated = $request->validate([
             'nama'     => 'required|string|max:255',
             'email'    => 'required|email|unique:akun,email,' . $user->username . ',username',
@@ -34,10 +39,25 @@ class ProfilController extends Controller
             'kelas'    => 'nullable|string|max:20',
             'jabatan'  => 'nullable|string|max:100',
             'password' => 'nullable|string|min:6|confirmed',
+        ], [
+            'nama.required'      => 'Nama lengkap wajib diisi.',
+            'email.required'     => 'Email wajib diisi.',
+            'email.email'        => 'Format email tidak valid.',
+            'email.unique'       => 'Email sudah digunakan oleh akun lain.',
+            'no_hp.required'     => 'Nomor telepon/WhatsApp wajib diisi.',
+            'password.min'       => 'Password baru minimal 6 karakter.',
+            'password.confirmed' => 'Konfirmasi password baru tidak cocok.',
         ]);
 
-        // Update email di tabel akun
+        // Update data di tabel akun
         $user->email = $validated['email'];
+        if (\Illuminate\Support\Facades\Schema::hasColumn('akun', 'nama')) {
+            $user->nama = $validated['nama'];
+        }
+        if (\Illuminate\Support\Facades\Schema::hasColumn('akun', 'nomor_kontak')) {
+            $user->nomor_kontak = $validated['no_hp'];
+        }
+
         if (!empty($validated['password'])) {
             $user->password = Hash::make($validated['password']);
         }

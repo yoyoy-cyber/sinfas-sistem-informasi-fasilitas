@@ -76,6 +76,7 @@ Route::middleware(['auth'])->prefix('user')->name('user.')->group(function () {
     // Route Status Pengajuan (TAMBAHKAN INI)
     Route::get('/status-pengajuan', [App\Http\Controllers\User\PeminjamanController::class, 'status'])->name('status');
     Route::get('/status-pengajuan/{id}', [App\Http\Controllers\User\PeminjamanController::class, 'statusDetail'])->name('status.detail');
+    Route::post('/status-pengajuan/{id}/cancel', [App\Http\Controllers\User\PeminjamanController::class, 'cancel'])->name('status.cancel');
 
     // Route Peminjaman User
     Route::get('/peminjaman/riwayat', [App\Http\Controllers\User\PeminjamanController::class, 'history'])->name('peminjaman.history');
@@ -128,6 +129,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // MODUL LAPORAN STAFF SARANA
     Route::get('/laporan', [App\Http\Controllers\Admin\LaporanController::class, 'index'])->name('laporan.index');
     Route::get('/laporan/cetak', [App\Http\Controllers\Admin\LaporanController::class, 'cetak'])->name('laporan.cetak');
+
+    // PROFIL ADMIN SARANA
+    Route::get('/profil', [App\Http\Controllers\Admin\ProfilController::class, 'index'])->name('profil');
+    Route::put('/profil', [App\Http\Controllers\Admin\ProfilController::class, 'update'])->name('profil.update');
 });
 
 
