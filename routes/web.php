@@ -133,6 +133,26 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // PROFIL ADMIN SARANA
     Route::get('/profil', [App\Http\Controllers\Admin\ProfilController::class, 'index'])->name('profil');
     Route::put('/profil', [App\Http\Controllers\Admin\ProfilController::class, 'update'])->name('profil.update');
+
+    // FITUR ADVANCED DATABASE (VIEW, SP, FUNCTION, TRIGGER)
+    Route::get('/database-features', function () {
+        $viewData = \App\Models\ViewPeminjamanLengkap::limit(10)->get();
+        $barangSample = \App\Models\Barang::first();
+        $funcResult = null;
+        if ($barangSample) {
+            $funcResult = \Illuminate\Support\Facades\DB::selectOne(
+                "SELECT func_total_dipinjam_barang(?) AS total_dipinjam, func_status_ketersediaan_barang(?) AS status_barang",
+                [$barangSample->kode_barang, $barangSample->kode_barang]
+            );
+        }
+        \Illuminate\Support\Facades\DB::statement("CALL sp_rekap_status_peminjaman(@p_tot, @p_pend, @p_setuju, @p_batal, @p_tolak)");
+        $procSummary = \Illuminate\Support\Facades\DB::selectOne(
+            "SELECT @p_tot AS total, @p_pend AS pending, @p_setuju AS disetujui, @p_batal AS dibatalkan, @p_tolak AS ditolak"
+        );
+        $triggerLogs = \App\Models\LogAktivitasPeminjaman::latest('id')->limit(15)->get();
+
+        return view('admin.database-features', compact('viewData', 'barangSample', 'funcResult', 'procSummary', 'triggerLogs'));
+    })->name('database-features');
 });
 
 

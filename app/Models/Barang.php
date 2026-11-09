@@ -74,4 +74,32 @@ class Barang extends Model
         }
         return (int) $this->peminjamanDisetujui()->count();
     }
+
+    /**
+     * Memanggil Stored Function MySQL: func_total_dipinjam_barang()
+     * Memenuhi konsep: Stored Function
+     */
+    public function getTotalDipinjamViaFunction(): int
+    {
+        try {
+            $res = \Illuminate\Support\Facades\DB::selectOne("SELECT func_total_dipinjam_barang(?) as total", [$this->kode_barang]);
+            return (int) ($res->total ?? 0);
+        } catch (\Throwable $e) {
+            return $this->total_dipinjam;
+        }
+    }
+
+    /**
+     * Memanggil Stored Function MySQL: func_status_ketersediaan_barang()
+     * Memenuhi konsep: Stored Function
+     */
+    public function getStatusViaFunction(): string
+    {
+        try {
+            $res = \Illuminate\Support\Facades\DB::selectOne("SELECT func_status_ketersediaan_barang(?) as status", [$this->kode_barang]);
+            return (string) ($res->status ?? 'Tersedia');
+        } catch (\Throwable $e) {
+            return $this->status;
+        }
+    }
 }
