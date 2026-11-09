@@ -23,8 +23,11 @@ class DashboardController extends Controller
         $kategoris = Kategori::orderBy('nama_kategori', 'asc')->get();
 
         // Ambil semua barang yang tersedia (untuk ditampilkan), diurutkan dari yang terbaru diupdate/ditambahkan
+        // Hanya hitung riwayat peminjaman yang sudah disetujui / aktif / selesai (bukan pending, ditolak, atau dibatalkan)
         $barangs = Barang::with('kategori')
-            ->withCount('peminjamanRequests')
+            ->withCount(['peminjamanRequests' => function ($query) {
+                $query->whereIn('status', ['disetujui', 'dipinjam', 'sedang_dipinjam', 'selesai', 'dikembalikan']);
+            }])
             ->where('jumlah_baik', '>', 0)
             ->orderBy('updated_at', 'desc')
             ->get();
@@ -37,7 +40,9 @@ class DashboardController extends Controller
         $query = $request->get('q', '');
 
         $barangs = Barang::with('kategori')
-            ->withCount('peminjamanRequests')
+            ->withCount(['peminjamanRequests' => function ($query) {
+                $query->whereIn('status', ['disetujui', 'dipinjam', 'sedang_dipinjam', 'selesai', 'dikembalikan']);
+            }])
             ->where(function($b) use ($query) {
                 $b->where('nama_barang', 'like', "%{$query}%")
                   ->orWhereHas('kategori', function($q) use ($query) {
@@ -63,7 +68,9 @@ class DashboardController extends Controller
         $kategoris = Kategori::orderBy('nama_kategori', 'asc')->get();
 
         $barangs = Barang::with('kategori')
-            ->withCount('peminjamanRequests')
+            ->withCount(['peminjamanRequests' => function ($query) {
+                $query->whereIn('status', ['disetujui', 'dipinjam', 'sedang_dipinjam', 'selesai', 'dikembalikan']);
+            }])
             ->where('id_kategori', $id_kategori)
             ->where('jumlah_baik', '>', 0)
             ->orderBy('updated_at', 'desc')

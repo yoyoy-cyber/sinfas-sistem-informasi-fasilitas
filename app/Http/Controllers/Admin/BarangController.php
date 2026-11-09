@@ -25,7 +25,9 @@ class BarangController extends Controller
     public function index()
     {
         $barangs = Barang::with('kategori')
-            ->withCount('peminjamanRequests')
+            ->withCount(['peminjamanRequests' => function ($query) {
+                $query->whereIn('status', ['disetujui', 'dipinjam', 'sedang_dipinjam', 'selesai', 'dikembalikan']);
+            }])
             ->orderBy('updated_at', 'desc')
             ->get();
         $kategoris = Kategori::withCount('barangs')->orderBy('nama_kategori', 'asc')->get();
