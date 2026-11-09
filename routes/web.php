@@ -179,6 +179,23 @@ Route::get('/about', function () {
 | STORAGE LINK & FILE SERVING FALLBACK (Untuk Shared Hosting / cPanel)
 |--------------------------------------------------------------------------
 */
+// Jalankan migrasi database di hosting (DirectAdmin / cPanel tanpa akses terminal SSH)
+Route::get('/migrate', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        $output = \Illuminate\Support\Facades\Artisan::output();
+        return '<pre style="background:#0f172a; color:#38bdf8; padding:2rem; border-radius:12px; font-family:monospace; line-height:1.6;">'
+            . '✅ <strong>Migration Berhasil Dijalankan di Hosting!</strong><br><br>'
+            . htmlspecialchars($output ?: 'Database sudah up to date.')
+            . '<br><br><a href="' . url('/') . '" style="color:#4ade80; text-decoration:none; font-weight:bold;">← Kembali ke Beranda</a></pre>';
+    } catch (\Throwable $e) {
+        return '<pre style="background:#0f172a; color:#ef4444; padding:2rem; border-radius:12px; font-family:monospace; line-height:1.6;">'
+            . '❌ <strong>Gagal menjalankan migrasi:</strong><br><br>'
+            . htmlspecialchars($e->getMessage())
+            . '</pre>';
+    }
+});
+
 Route::get('/storage-link', function () {
     try {
         \Illuminate\Support\Facades\Artisan::call('storage:link');

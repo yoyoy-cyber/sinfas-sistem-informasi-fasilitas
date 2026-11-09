@@ -91,10 +91,23 @@ class PeminjamanController extends Controller
 
         $alasan = $request->input('alasan_pembatalan', 'Dibatalkan oleh peminjam');
 
-        $pengajuan->update([
-            'status' => 'dibatalkan',
-            'alasan_pembatalan' => $alasan,
-        ]);
+        // Pastikan kolom alasan_pembatalan ada di database (auto-add jika belum dimigrasi di hosting)
+        if (!\Illuminate\Support\Facades\Schema::hasColumn('peminjaman_requests', 'alasan_pembatalan')) {
+            try {
+                \Illuminate\Support\Facades\Schema::table('peminjaman_requests', function ($table) {
+                    $table->text('alasan_pembatalan')->nullable()->after('alasan_penolakan');
+                });
+            } catch (\Throwable $e) {
+                // Ignore jika tidak ada privilege ALTER TABLE
+            }
+        }
+
+        $updatePayload = ['status' => 'dibatalkan'];
+        if (\Illuminate\Support\Facades\Schema::hasColumn('peminjaman_requests', 'alasan_pembatalan')) {
+            $updatePayload['alasan_pembatalan'] = $alasan;
+        }
+
+        $pengajuan->update($updatePayload);
 
         return redirect()->route('user.status')
             ->with('success', 'Pengajuan peminjaman untuk "' . ($pengajuan->nama_barang ?? 'barang') . '" berhasil dibatalkan.');
